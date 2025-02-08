@@ -1,66 +1,91 @@
+'use client';
+
+import Link from 'next/link';
 import Image from 'next/image';
+import Body from '@/components/atoms/Body';
+import Title from '@/components/atoms/Title';
+import { Button } from '@/components/ui/button';
+import Subtitle from '@/components/atoms/Subtitle';
 
 export default function Home() {
+  const verificationEntry = [
+    {
+      title: 'Try BVN Verification  →',
+      body: 'Confirm your identity using BVN to prevent fraud and unauthorized access.',
+    },
+    {
+      title: 'Try Document Verification  →',
+      body: 'Upload and scan your official ID to confirm your identity.',
+    },
+  ];
   return (
-    <div className=" items-center justify-items-center min-h-screen p-0 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="w-full h-screen sm:h-[694px] sm:w-[420px] border border-stone-100 grid grid-rows-[20px_1fr_20px] gap-16 p-4 sm:rounded-3xl shadow-sm">
-        {/* Header */}
-        <header>
-          <p>Hello</p>
-        </header>
+    <>
+      {/* Header */}
+      <header>
+        <figure className="p-[1px] border-4 border-stone-900 mb-2 mt-6 h-28 w-28 mx-auto rounded-full flex justify-items-center items-center">
+          <Image
+            aria-hidden
+            src="/images/profile.jpg"
+            alt="Profile photo"
+            width={160}
+            height={160}
+            className="rounded-full h-full"
+          />
+        </figure>
+        <Title center>Hello Kingslee</Title>
+        <Body center>
+          You’ve been selected to test the first Anti-Money Laundering product
+          from Southeast Nigeria.
+        </Body>
+        <Body center className="mt-4">
+          0/5 Trials left
+        </Body>
 
-        {/* Body */}
-        <main className="bg-stone-200">Yeah yeah</main>
+        <Link href="/applications">
+          <Button className="rounded-full mt-1 flex mx-auto">
+            View Applications
+          </Button>
+        </Link>
+      </header>
 
-        {/* Footer */}
-        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-          <a
-            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/file.svg"
-              alt="File icon"
-              width={16}
-              height={16}
-            />
-            Learn
-          </a>
-          <a
-            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/window.svg"
-              alt="Window icon"
-              width={16}
-              height={16}
-            />
-            Examples
-          </a>
-          <a
-            className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-            href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Body */}
+      <main className="flex flex-col gap-[2px] mt-6">
+        {verificationEntry?.map((item: any, index) => (
+          <Link
+            key={item?.title + index}
+            href="/secure/prestart"
+            className={`flex items-center justify-items-center gap-2 bg-stone-100 hover:bg-stone-200 px-4 ${
+              index === 0
+                ? 'rounded-t-2xl'
+                : index === verificationEntry.length - 1
+                ? 'rounded-b-2xl'
+                : ''
+            }`}
           >
             <Image
               aria-hidden
               src="/globe.svg"
               alt="Globe icon"
-              width={16}
-              height={16}
+              width={48}
+              height={48}
+              className="mx-auto mt-6 mb-4"
             />
-            Go to nextjs.org →
-          </a>
-        </footer>
-      </div>
-    </div>
+            <div className="w-full">
+              <Subtitle className="text-base">{item?.title}</Subtitle>
+              <Body className="text-xs">{item?.body}</Body>
+            </div>
+          </Link>
+        ))}
+      </main>
+
+      {/* Footer */}
+      <footer>
+        <Body center className="text-xs mt-2">
+          <>
+            Powered by <span className="text-stone-400">IKaad</span>
+          </>
+        </Body>
+      </footer>
+    </>
   );
 }

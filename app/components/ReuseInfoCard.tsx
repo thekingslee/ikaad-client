@@ -1,0 +1,24 @@
+import Body from '@/components/atoms/Body';
+import Subtitle from '@/components/atoms/Subtitle';
+
+const ReuseInfoCard = ({
+  data,
+}: {
+  data: { title: string; body: string }[];
+}) => {
+  return (
+    <div className="bg-stone-100 p-3 rounded-lg text-sm text-left mb-2">
+      {data.map((item, index) => (
+        <div
+          key={item?.title + index}
+          className={` ${index === data.length - 1 ? '' : 'mb-3'}`}
+        >
+          <Subtitle className="font-medium">{item?.title}</Subtitle>
+          <Body className="text-xs">{item?.body}</Body>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ReuseInfoCard;
