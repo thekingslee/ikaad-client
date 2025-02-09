@@ -20,7 +20,7 @@ const CameraPermission = () => {
       <header>
         <ReuseNav />
 
-        <Title center className="mb-3 mt-6">
+        <Title center className=" mt-6">
           Camera Access Needed
         </Title>
 
@@ -30,7 +30,7 @@ const CameraPermission = () => {
       </header>
 
       {/* Body */}
-      <main>
+      <main className="p-4">
         <Body className="mb-4">
           To ensure the security and integrity of your account, we request
           access to your device’s camera for::

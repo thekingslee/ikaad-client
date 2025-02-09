@@ -28,3 +28,42 @@ export const loginFormSchema = z.object({
     })
     .max(50),
 });
+
+export const userFormSchema = z.object({
+  firstname: z
+    .string()
+    .min(2, {
+      message: 'Username must be at least 2 characters.',
+    })
+    .max(50, {
+      message: 'Username must be less than 50 characters.',
+    }),
+  middlename: z
+    .string()
+    .min(2, {
+      message: 'Username must be at least 2 characters.',
+    })
+    .max(50, {
+      message: 'Username must be less than 50 characters.',
+    }),
+  lastname: z
+    .string()
+    .min(2, {
+      message: 'Username must be at least 2 characters.',
+    })
+    .max(50, {
+      message: 'Username must be less than 50 characters.',
+    }),
+  DOB: z.date(),
+});
+
+export const bnvSchema = z.object({
+  bvn: z
+    .string()
+    .min(11, {
+      message: 'BVN must be 11 characters.',
+    })
+    .max(11, {
+      message: 'BVN must be 11 characters.',
+    }),
+});

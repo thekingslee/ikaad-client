@@ -12,10 +12,12 @@ import { Form } from '@/components/ui/form';
 import FormFieldComponent from '@/app/components/FormField';
 import ReuseButton from '@/app/components/ReuseButton';
 import ReuseAlert from '@/app/components/ReuseAlert';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { loginFormSchema } from '@/common/FormSchema';
 
 const Signin = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -26,7 +28,6 @@ const Signin = () => {
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Navigate to home "/"
-    const router = useRouter();
     router.push('/');
 
     // Do something with the form values.
@@ -52,7 +53,8 @@ const Signin = () => {
         </Body>
       </header>
 
-      <main className="bg-red-10">
+      {/* Body */}
+      <main>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormFieldComponent
@@ -74,6 +76,7 @@ const Signin = () => {
         </Form>
       </main>
 
+      {/* Footer */}
       <footer>
         <ReuseButton action={form.handleSubmit(onSubmit)}>Submit</ReuseButton>
 
