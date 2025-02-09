@@ -67,3 +67,14 @@ export const bnvSchema = z.object({
       message: 'BVN must be 11 characters.',
     }),
 });
+
+export const docUploadSchema = z.object({
+  doc: z
+    .instanceof(File)
+    .refine((file) => file.size <= 5 * 1024 * 1024, {
+      message: 'File size must be less than 5MB.',
+    })
+    .refine((file) => ['image/jpeg', 'image/png'].includes(file.type), {
+      message: 'File must be a JPEG, or PNG.',
+    }),
+});

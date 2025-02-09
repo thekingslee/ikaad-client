@@ -28,7 +28,7 @@ const FormData = () => {
 
   function onSubmit(values: z.infer<typeof userFormSchema>) {
     // Navigate to home "/"
-    router.push('/');
+    router.push('bvn');
 
     // Do something with the form values.
     // ✅ This will be type-safe and validated.

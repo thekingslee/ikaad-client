@@ -12,7 +12,7 @@ const ReuseNav = () => {
   };
 
   return (
-    <nav className="border-b border-stone-100 flex items-center justify-between py-2">
+    <nav className="borde border-stone-100 flex items-center justify-between py-2">
       <Button
         onClick={goBack}
         className="px-[10px] pt-0 rounded-full"
