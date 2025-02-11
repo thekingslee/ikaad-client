@@ -1,20 +1,27 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import ReuseButton from '@/app/components/ReuseButton';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
-import Title from '@/components/atoms/Title';
 import { useRouter } from 'next/navigation';
 import Subtitle from '@/components/atoms/Subtitle';
+import useLiveCaptureStore from '@/store/liveCaptureStore';
 
 const ConfirmVideo = () => {
   const router = useRouter();
+  const { userRecording } = useLiveCaptureStore();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.src = userRecording;
+    }
+  }, [userRecording]);
+
   const navigateToRetake = () => {
-    router.push('live-capture');
+    router.replace('live-capture');
   };
   const navigateToNext = () => {
     router.push('form-data');
@@ -29,7 +36,7 @@ const ConfirmVideo = () => {
 
       {/* Body */}
       <main className="px-8 h-full">
-        <div className="w-72 h-72  bg-slate-100 border-4 border-stone-900 mx-auto rounded-full">
+        <div className="w-72 h-72 bg-stone-900 border-4 border-stone-900 mx-auto rounded-full relative overflow-hidden">
           <video
             crossOrigin="anonymous"
             height="694"
@@ -38,6 +45,7 @@ const ConfirmVideo = () => {
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             playsInline={true}
             autoPlay
+            loop
           ></video>
         </div>
 
