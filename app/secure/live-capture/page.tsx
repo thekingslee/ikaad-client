@@ -1,7 +1,7 @@
 'use client';
 
 import ReuseNav from '@/app/components/ReuseNav';
-import { useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Title from '@/components/atoms/Title';
 import ReuseButton from '@/app/components/ReuseButton';

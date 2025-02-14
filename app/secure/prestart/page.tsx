@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import Title from '@/components/atoms/Title';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
@@ -17,8 +16,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import useStore from '@/store/store';
 
-const PreStart = () => {
-  const searchParams = useSearchParams();
+const PreStartPage: React.FC = () => {
   const { verificationStages, setVerificationStages } = useStore();
 
   const form = useForm<z.infer<typeof preStartSchema>>({
@@ -30,8 +28,6 @@ const PreStart = () => {
 
   function onSubmit(values: z.infer<typeof preStartSchema>) {
     // Navigate to home "/"
-    const router = useRouter();
-    router.push('/');
 
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -40,23 +36,19 @@ const PreStart = () => {
 
   useEffect(() => {
     // Get verificationStages from URL
-
-    const stagesParam = searchParams.get('verificationStages');
+    const url = new URL(window.location.href);
+    const stagesParam = url.searchParams.get('verificationStages');
     if (stagesParam) {
       const stages = JSON.parse(decodeURIComponent(stagesParam));
       sessionStorage.setItem('verificationStages', JSON.stringify(stages));
       setVerificationStages(stages);
 
       // Remove verificationStages from URL
-
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete('verificationStages');
-      const newUrl = `${
-        window.location.pathname
-      }?${newSearchParams.toString()}`;
+      url.searchParams.delete('verificationStages');
+      const newUrl = `${url.pathname}?${url.searchParams.toString()}`;
       window.history.replaceState(null, '', newUrl);
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     console.log('Verification Stages*', verificationStages);
@@ -134,4 +126,4 @@ const PreStart = () => {
   );
 };
 
-export default PreStart;
+export default PreStartPage;

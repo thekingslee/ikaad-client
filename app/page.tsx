@@ -56,7 +56,7 @@ export default function Home() {
     <>
       {/* Header */}
       <header>
-        <figure className="p-[1px] border-4 border-stone-900 mb-2 mt-6 h-28 w-28 mx-auto rounded-full flex justify-items-center items-center">
+        <figure className="p-[1px] border-[3px] border-stone-900 mb-2 mt-6 h-28 w-28 mx-auto rounded-full flex justify-items-center items-center">
           <Image
             aria-hidden
             src="/images/profile.jpg"

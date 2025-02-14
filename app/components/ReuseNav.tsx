@@ -20,7 +20,7 @@ const ReuseNav = () => {
       >
         <Image
           aria-hidden
-          src="/images/icons/return.svg" // TODO: Replace Icon
+          src="/images/icons/return.svg"
           alt="Return icon"
           width={18}
           height={18}
@@ -35,7 +35,7 @@ const ReuseNav = () => {
       >
         <Image
           aria-hidden
-          src="/images/icons/close.svg" // TODO: Replace Icon
+          src="/images/icons/close.svg"
           alt="Return icon"
           width={18}
           height={18}

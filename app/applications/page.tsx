@@ -17,38 +17,38 @@ type Payment = {
   date: string;
 };
 
-export const applications: Payment[] = [
-  {
-    id: '728ed52f',
-    name: 'Olive Oil',
-    reference_id: '728ed52f',
-    status: 'pending',
-    date: 'm@example.com',
-  },
-  {
-    id: 'sdkljlsnd',
-    name: 'Olive Oil',
-    reference_id: '728ed52f',
-    status: 'pending',
-    date: 'm@example.com',
-  },
-  {
-    id: 'sdsdwe',
-    name: 'Olive Oil',
-    reference_id: '728ed52f',
-    status: 'pending',
-    date: 'm@example.com',
-  },
+// import { useMediaQuery } from "@/hooks/use-media-query"
+// const isDesktop = useMediaQuery("(min-width: 768px)")
 
-  // ...
-];
-
-const Applications: React.FC = () => {
+const ApplicationsPage: React.FC = () => {
   const [selected, setSelected] = useState<Payment>();
   const [open, setOpen] = useState<boolean>(false);
 
-  // import { useMediaQuery } from "@/hooks/use-media-query"
-  // const isDesktop = useMediaQuery("(min-width: 768px)")
+  const applications: Payment[] = [
+    {
+      id: '728ed52f',
+      name: 'Olive Oil',
+      reference_id: '728ed52f',
+      status: 'pending',
+      date: 'm@example.com',
+    },
+    {
+      id: 'sdkljlsnd',
+      name: 'Olive Oil',
+      reference_id: '728ed52f',
+      status: 'pending',
+      date: 'm@example.com',
+    },
+    {
+      id: 'sdsdwe',
+      name: 'Olive Oil',
+      reference_id: '728ed52f',
+      status: 'pending',
+      date: 'm@example.com',
+    },
+
+    // ...
+  ];
 
   return (
     <>
@@ -96,4 +96,4 @@ const Applications: React.FC = () => {
   );
 };
 
-export default Applications;
+export default ApplicationsPage;
