@@ -5,15 +5,30 @@ import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Subtitle from '@/components/atoms/Subtitle';
 import ReuseButton from '@/app/components/ReuseButton';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import useStore from '@/store/store';
+import { useEffect } from 'react';
 
 const Start = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const { currentStage, stageData, verificationStages, updateCurrentStage } =
+    useStore();
 
   const navigateToNext = () => {
-    router.push('camera-permission');
+    router.push(stageData?.startRoute);
   };
 
+  useEffect(() => {
+    // Update StageData with the next stage if this is the endRoute of the current stage
+    if (stageData?.endRoute === pathname) {
+      updateCurrentStage(verificationStages[currentStage + 1]);
+    }
+  }, []);
+
+  console.log('stageData', stageData);
+  console.log('verificationStages', verificationStages);
   return (
     <>
       {/* Header */}

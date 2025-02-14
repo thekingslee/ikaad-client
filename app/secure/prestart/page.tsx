@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Title from '@/components/atoms/Title';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
@@ -14,8 +14,13 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { preStartSchema } from '@/common/FormSchema';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import useStore from '@/store/store';
 
 const PreStart = () => {
+  const searchParams = useSearchParams();
+  const { verificationStages, setVerificationStages } = useStore();
+
   const form = useForm<z.infer<typeof preStartSchema>>({
     resolver: zodResolver(preStartSchema),
     defaultValues: {
@@ -32,6 +37,30 @@ const PreStart = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  useEffect(() => {
+    // Get verificationStages from URL
+
+    const stagesParam = searchParams.get('verificationStages');
+    if (stagesParam) {
+      const stages = JSON.parse(decodeURIComponent(stagesParam));
+      sessionStorage.setItem('verificationStages', JSON.stringify(stages));
+      setVerificationStages(stages);
+
+      // Remove verificationStages from URL
+
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('verificationStages');
+      const newUrl = `${
+        window.location.pathname
+      }?${newSearchParams.toString()}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    console.log('Verification Stages*', verificationStages);
+  }, [verificationStages]);
 
   return (
     <>

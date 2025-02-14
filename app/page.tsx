@@ -6,18 +6,47 @@ import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { Button } from '@/components/ui/button';
 import Subtitle from '@/components/atoms/Subtitle';
+import { useRouter } from 'next/navigation';
+import useStore, { VericationStageTypes } from '@/store/store';
+import { useEffect, useRef } from 'react';
+
+type verificationEntry = {
+  title: string;
+  body: string;
+  verification_stages: VericationStageTypes[];
+};
 
 export default function Home() {
-  const verificationEntry = [
+  const router = useRouter();
+  const { stageData, setVerificationStages, updateCurrentStage } = useStore();
+  const routeRef = useRef<string | null>(null);
+
+  const verificationEntry: verificationEntry[] = [
     {
       title: 'Try BVN Verification  →',
       body: 'Confirm your identity using BVN to prevent fraud and unauthorized access.',
+      verification_stages: ['START', 'LIVELINESS_TEST', 'BVN'],
     },
     {
       title: 'Try Document Verification  →',
       body: 'Upload and scan your official ID to confirm your identity.',
+      verification_stages: ['START', 'LIVELINESS_TEST', 'DOCUMENT_CAPTURE'],
     },
   ];
+
+  const handleVerification = (item: verificationEntry) => {
+    setVerificationStages(item?.verification_stages);
+    updateCurrentStage(item?.verification_stages[0]);
+    routeRef.current = 'done';
+  };
+
+  useEffect(() => {
+    if (stageData?.startRoute && routeRef.current) {
+      routeRef.current = null;
+      router.push(stageData?.startRoute);
+    }
+  }, [stageData, routeRef.current]);
+
   return (
     <>
       {/* Header */}
@@ -50,17 +79,17 @@ export default function Home() {
 
       {/* Body */}
       <main className="flex flex-col gap-[2px] mt-6">
-        {verificationEntry?.map((item: any, index) => (
-          <Link
+        {verificationEntry?.map((item: verificationEntry, index) => (
+          <div
             key={item?.title + index}
-            href="/secure/prestart"
-            className={`flex items-center justify-items-center gap-2 bg-stone-100 hover:bg-stone-200 px-4 ${
+            className={`cursor-pointer flex items-center justify-items-center gap-2 bg-stone-100 hover:bg-stone-200 px-4 ${
               index === 0
                 ? 'rounded-t-2xl'
                 : index === verificationEntry.length - 1
                 ? 'rounded-b-2xl'
                 : ''
             }`}
+            onClick={() => handleVerification(item)}
           >
             <Image
               aria-hidden
@@ -74,7 +103,7 @@ export default function Home() {
               <Subtitle className="text-base">{item?.title}</Subtitle>
               <Body className="text-xs">{item?.body}</Body>
             </div>
-          </Link>
+          </div>
         ))}
       </main>
 

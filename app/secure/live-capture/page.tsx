@@ -19,7 +19,7 @@ const flow: { step: Step; message: string }[] = [
     message: 'Please position your face within the frame',
   },
   { step: 'smile', message: 'Please smile' },
-  { step: 'open-mouth', message: 'Please open your mouth' },
+  { step: 'open-mouth', message: 'Keep your eyes and your mouth open' },
   { step: 'complete', message: 'Done' },
 ];
 
