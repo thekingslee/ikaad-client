@@ -78,11 +78,17 @@ const storedVerificationStages =
     ? JSON.parse(sessionStorage.getItem('verificationStages') || '[]')
     : [];
 
+// Retrieve currentStage from session storage
+const storedCurrentStage =
+  typeof window !== 'undefined'
+    ? JSON.parse(sessionStorage.getItem('currentStage') || '0')
+    : 0;
+
 const useStore = create<StoreState>((set) => ({
-  currentStage: 0,
+  currentStage: storedCurrentStage,
   stageData:
     verificationsMap.find(
-      (item) => item.stage === storedVerificationStages[0]
+      (item) => item.stage === storedVerificationStages[storedCurrentStage]
     ) || ({} as VerificationsMap),
   verificationStages: storedVerificationStages as VericationStageTypes[],
 
@@ -98,6 +104,9 @@ const useStore = create<StoreState>((set) => ({
       stageData =
         verificationsMap.find((item) => item.stage === stage) ||
         ({} as VerificationsMap);
+
+      // Save the current stage to session storage
+      sessionStorage.setItem('currentStage', JSON.stringify(newStage));
 
       return {
         currentStage: newStage,

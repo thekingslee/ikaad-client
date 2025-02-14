@@ -12,22 +12,25 @@ import ReuseNav from '@/app/components/ReuseNav';
 import ReuseButton from '@/app/components/ReuseButton';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
+import useUserDataStore from '@/store/userData';
 
 const FormData = () => {
   const router = useRouter();
+  const { userData, setUserData } = useUserDataStore();
 
   const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: {
+    defaultValues: userData || {
       firstname: '',
       middlename: '',
       lastname: '',
-      // DOB: '',
+      dob: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof userFormSchema>) {
-    // Navigate to home "/"
+    setUserData({ ...values, bvn: userData?.bvn || '' });
+    // Navigate to bvn "/secure/bvn"
     router.push('bvn');
 
     // Do something with the form values.
@@ -75,7 +78,7 @@ const FormData = () => {
 
             <FormFieldComponent
               form={form}
-              name="DOB"
+              name="dob"
               label="Date of Birth"
               placeholder="Enter a date"
               type="date"
@@ -86,7 +89,12 @@ const FormData = () => {
 
       {/* Footer */}
       <footer>
-        <ReuseButton action={form.handleSubmit(onSubmit)}>Continue</ReuseButton>
+        <ReuseButton
+          action={form.handleSubmit(onSubmit)}
+          disabled={!form.formState.isValid}
+        >
+          Continue
+        </ReuseButton>
 
         <Body center className="text-xs mt-2">
           Powered by <span className="text-stone-400">IKaad</span>

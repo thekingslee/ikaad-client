@@ -25,12 +25,17 @@ export default function Home() {
     {
       title: 'Try BVN Verification  →',
       body: 'Confirm your identity using BVN to prevent fraud and unauthorized access.',
-      verification_stages: ['START', 'LIVELINESS_TEST', 'BVN'],
+      verification_stages: ['START', 'LIVELINESS_TEST', 'BVN', 'FINISH'],
     },
     {
       title: 'Try Document Verification  →',
       body: 'Upload and scan your official ID to confirm your identity.',
-      verification_stages: ['START', 'LIVELINESS_TEST', 'DOCUMENT_CAPTURE'],
+      verification_stages: [
+        'START',
+        'LIVELINESS_TEST',
+        'DOCUMENT_CAPTURE',
+        'FINISH',
+      ],
     },
   ];
 
