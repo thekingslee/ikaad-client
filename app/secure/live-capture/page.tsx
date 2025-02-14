@@ -31,6 +31,7 @@ const LiveCapture = () => {
   const { videoRef, startRecording, stopRecording, isRecording } =
     useVideoRecorder();
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const [ready, setReady] = useState(false);
   const [currentStep, setCurrentStep] = useState<{
@@ -89,9 +90,9 @@ const LiveCapture = () => {
       } else {
         console.log("Make sure there's just one person in the camera");
       }
-      const resizedDetections = faceapi.resizeResults(detections, displaySize);
-      faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-      faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
+      // const resizedDetections = faceapi.resizeResults(detections, displaySize);
+      // faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+      // faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
       // faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
     }
   }, []);
@@ -169,14 +170,36 @@ const LiveCapture = () => {
         completeOpenMouthTest();
         setCurrentStep(flow[3]);
 
-        setTimeout(() => {
+        timeoutIdRef.current = setTimeout(() => {
           router.push('confirm-video');
-        }, 3000);
+        }, 2000);
       }
     } else {
       console.log('No face detected');
     }
+
+    return () => {
+      // Clear timeout
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    };
   }, [detectionData, currentStep]);
+
+  useEffect(() => {
+    return () => {
+      // Clean up media stream
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+      }
+
+      // Clear interval
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, [getVideo, videoRef]);
 
   return (
     <>
