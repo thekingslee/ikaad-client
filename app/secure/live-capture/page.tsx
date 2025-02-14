@@ -31,7 +31,6 @@ const LiveCapture = () => {
   const { videoRef, startRecording, stopRecording, isRecording } =
     useVideoRecorder();
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const [ready, setReady] = useState(false);
   const [currentStep, setCurrentStep] = useState<{
@@ -170,20 +169,13 @@ const LiveCapture = () => {
         completeOpenMouthTest();
         setCurrentStep(flow[3]);
 
-        timeoutIdRef.current = setTimeout(() => {
+        setTimeout(() => {
           router.push('confirm-video');
         }, 2000);
       }
     } else {
       console.log('No face detected');
     }
-
-    return () => {
-      // Clear timeout
-      if (timeoutIdRef.current) {
-        clearTimeout(timeoutIdRef.current);
-      }
-    };
   }, [detectionData, currentStep]);
 
   useEffect(() => {
