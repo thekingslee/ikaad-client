@@ -53,6 +53,20 @@ const LiveCapture = () => {
     }
   }, []);
 
+  const stopVideo = () => {
+    if (videoRef.current) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => {
+          track.stop();
+        });
+      }
+      videoRef.current.srcObject = null;
+      videoRef.current = null;
+    }
+  };
+
   const performFaceDetection = useCallback(async () => {
     const scaleFactor = 0.5;
 
@@ -134,6 +148,7 @@ const LiveCapture = () => {
   }, [getVideo]);
 
   const completeOpenMouthTest = useCallback(() => {
+    stopVideo();
     stopRecording();
   }, [stopRecording]);
 
@@ -184,11 +199,13 @@ const LiveCapture = () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         stream.getTracks().forEach((track) => track.stop());
+        videoRef.current.srcObject = null; // Clear the srcObject
       }
 
       // Clear interval
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
       }
     };
   }, [getVideo, videoRef]);
