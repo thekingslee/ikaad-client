@@ -6,13 +6,34 @@ import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const CameraPermission = () => {
   const router = useRouter();
 
+  const [cameraAccess, setCameraAccess] = useState<boolean>(false);
+
   const navigateToNext = () => {
     router.push('live-capture');
   };
+
+  // Request camera permission and display a message if given or denied
+  const requestCameraAccess = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      stream.getVideoTracks().forEach((track) => track.stop());
+      setCameraAccess(true);
+    } catch (error) {
+      console.error('Camera access denied:', error);
+      setCameraAccess(false);
+    }
+  };
+
+  useEffect(() => {
+    requestCameraAccess();
+  }, []);
 
   return (
     <>
@@ -44,8 +65,10 @@ const CameraPermission = () => {
       </main>
 
       {/* Footer */}
-      <footer>
-        <ReuseButton action={navigateToNext}>Continue</ReuseButton>
+      <footer onClick={requestCameraAccess}>
+        <ReuseButton action={navigateToNext} disabled={!cameraAccess}>
+          Continue
+        </ReuseButton>
 
         <Body center className="text-xs mt-2">
           Powered by <span className="text-stone-400">IKaad</span>

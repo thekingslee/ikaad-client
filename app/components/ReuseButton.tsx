@@ -6,13 +6,21 @@ type ButtonProps = {
   children?: React.ReactNode;
   className?: string;
   variant?: 'secondary' | 'ghost' | 'default';
+  disabled?: boolean;
 };
-const ReuseButton = ({ action, children, className, variant }: ButtonProps) => {
+const ReuseButton = ({
+  action,
+  children,
+  className,
+  variant,
+  disabled,
+}: ButtonProps) => {
   return (
     <Button
       className={clsx(className, 'mb-2 rounded-full w-full py-6')}
       onClick={action}
       variant={variant || 'default'}
+      disabled={disabled}
     >
       {children ? children : 'Submit'}
     </Button>

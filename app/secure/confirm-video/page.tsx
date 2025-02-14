@@ -33,7 +33,6 @@ const ConfirmVideo = () => {
   useEffect(() => {
     // Update StageData with the next stage if this is the endRoute of the current stage
     if (stageData?.endRoute === pathname) {
-      console.log('PP', verificationStages);
       updateCurrentStage(verificationStages[currentStage + 1]); // TODO: Have a more sustainable approach
     }
   }, []);

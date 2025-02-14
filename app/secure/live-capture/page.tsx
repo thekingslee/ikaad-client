@@ -46,6 +46,7 @@ const LiveCapture = () => {
           video: true,
         });
         videoRef.current.srcObject = stream;
+        videoRef.current.style.transform = 'scaleX(-1)';
       } catch (err) {
         console.error('Error accessing webcam:', err);
       }
@@ -214,7 +215,7 @@ const LiveCapture = () => {
               ref={canvasRef}
               height="694"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              className="absolute top-0 left-0 hidden"
+              className="absolute top-0 left-0"
             />
 
             <motion.div
