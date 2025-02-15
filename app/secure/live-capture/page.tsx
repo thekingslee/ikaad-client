@@ -153,8 +153,6 @@ const LiveCapture = () => {
   }, [stopRecording]);
 
   useEffect(() => {
-    console.log('DATA', detectionData?.expressions?.surprised);
-
     if (detectionData?.detection) {
       // If the current step is "detect-face"
       if (
@@ -230,11 +228,10 @@ const LiveCapture = () => {
               damping: 30,
               mass: 0.5,
             }}
-            className=" w-72 h-72 bg-stone-900 border-4 border-stone-900 mx-auto rounded-full relative overflow-hidden"
+            className="w-full h-auto bg-stone-900 border-4 border-stone-900 mx-auto relative overflow-hidden rounded-full aspect-square"
           >
             <video
               crossOrigin="anonymous"
-              height="694"
               ref={videoRef}
               muted
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -245,7 +242,6 @@ const LiveCapture = () => {
 
             <canvas
               ref={canvasRef}
-              height="694"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               className="absolute top-0 left-0"
             />
@@ -259,17 +255,17 @@ const LiveCapture = () => {
             />
             {/* <AnimatePresence>
               {infoMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-transparent border border-stone-900 rounded-full px-2 py-1 text-xs mx-auto absolute inset-0 flex items-center justify-center"
-                >
-                  <span className="bg-stone-50 px-2 py-1 rounded-full">
-                    {infoMsg}
-                  </span>
-                </motion.div>
+              <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="bg-transparent border border-stone-900 rounded-full px-2 py-1 text-xs mx-auto absolute inset-0 flex items-center justify-center"
+              >
+              <span className="bg-stone-50 px-2 py-1 rounded-full">
+              {infoMsg}
+              </span>
+              </motion.div>
               )}
             </AnimatePresence> */}
           </motion.div>

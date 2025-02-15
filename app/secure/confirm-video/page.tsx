@@ -46,7 +46,7 @@ const ConfirmVideo = () => {
 
       {/* Body */}
       <main className="px-8 h-full">
-        <div className="w-72 h-72 bg-stone-900 border-4 border-green-500 mx-auto rounded-full relative overflow-hidden">
+        <div className="w-full h-auto bg-stone-900 border-4 border-green-500 mx-auto relative overflow-hidden rounded-full aspect-square">
           <video
             crossOrigin="anonymous"
             height="694"

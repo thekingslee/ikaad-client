@@ -1,5 +1,8 @@
 'use client';
 
+import Link from 'next/link';
+import { useEffect } from 'react';
+import useStore from '@/store/store';
 import Title from '@/components/atoms/Title';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
@@ -12,9 +15,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { preStartSchema } from '@/common/FormSchema';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import useStore from '@/store/store';
 
 const PreStartPage: React.FC = () => {
   const { verificationStages, setVerificationStages } = useStore();
@@ -53,6 +53,27 @@ const PreStartPage: React.FC = () => {
   useEffect(() => {
     console.log('Verification Stages*', verificationStages);
   }, [verificationStages]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        console.log('You are using a mobile device');
+      } else {
+        console.log('You are using a desktop device');
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <>
