@@ -217,7 +217,7 @@ const LiveCapture = () => {
 
       {/* Body */}
       <main className="px-8 h-full flex flex-col justify-between">
-        <div className="grid gap-4">
+        <div className="grid gap-4 ">
           <motion.div
             key={ready.toString()}
             initial={{ scale: 1 }}
@@ -438,7 +438,7 @@ const LiveCapture = () => {
           </div>
         </div>
 
-        <div className="relative h-10 mt-4">
+        <div className="relative h-full  mt-4">
           <AnimatePresence>
             <motion.div
               key={currentStep?.step}
@@ -448,6 +448,18 @@ const LiveCapture = () => {
               transition={{ duration: 0.5 }}
               style={{ position: 'absolute', width: '100%' }}
             >
+              {!!currentStep?.message && (
+                <Body center>
+                  {' '}
+                  Not detecting your face?{' '}
+                  <span
+                    className="text-blue-500 cursor-pointer"
+                    onClick={() => window.location.reload()}
+                  >
+                    Reload page
+                  </span>
+                </Body>
+              )}
               <Title center>
                 {currentStep?.message || 'Press Ready to begin capture'}
               </Title>

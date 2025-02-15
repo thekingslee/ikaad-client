@@ -65,7 +65,7 @@ const CameraPermission = () => {
       </main>
 
       {/* Footer */}
-      <footer onClick={requestCameraAccess}>
+      <footer>
         <ReuseButton action={navigateToNext} disabled={!cameraAccess}>
           Continue
         </ReuseButton>
