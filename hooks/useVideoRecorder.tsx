@@ -23,7 +23,7 @@ const useVideoRecorder = () => {
       }
     };
     recorder.onstop = () => {
-      const blob = new Blob(recordedChunks, { type: 'video/webm; codecs=vp8' });
+      const blob = new Blob(recordedChunks, { type: 'video/mp4' });
       const url = URL.createObjectURL(blob);
       console.log('RECORdS', url);
       setUserRecording(url); // Save the media to liveCaptureStore
