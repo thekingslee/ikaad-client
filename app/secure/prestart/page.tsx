@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import useStore from '@/store/store';
 import Title from '@/components/atoms/Title';
 import ReuseNav from '@/app/components/ReuseNav';
@@ -15,8 +16,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { preStartSchema } from '@/common/FormSchema';
+import useDeviceType from '@/hooks/useDeviceType';
 
 const PreStartPage: React.FC = () => {
+  const router = useRouter();
+  const { deviceType } = useDeviceType();
   const { verificationStages, setVerificationStages } = useStore();
 
   const form = useForm<z.infer<typeof preStartSchema>>({
@@ -33,6 +37,14 @@ const PreStartPage: React.FC = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  useEffect(() => {
+    // Skip page for mobile screens
+    if (deviceType === 'mobile') {
+      console.log('Device Type', deviceType);
+      router.replace('start');
+    }
+  }, [deviceType]);
 
   useEffect(() => {
     // Get verificationStages from URL
@@ -135,7 +147,7 @@ const PreStartPage: React.FC = () => {
       <footer>
         <Body center className="text-xs mt-2">
           Don’t have a smartphone?{' '}
-          <Link href={'start'} className="text-stone-400">
+          <Link href={'start'} className="text-blue-500">
             Continue with the device
           </Link>
         </Body>
