@@ -13,14 +13,15 @@ import * as faceapi from 'face-api.js';
 import useVideoRecorder from '@/hooks/useVideoRecorder';
 
 type Step = 'detect-face' | 'smile' | 'open-mouth' | 'complete';
-const flow: { step: Step; message: string }[] = [
+const flow: { id: number; step: Step; message: string }[] = [
   {
+    id: 0,
     step: 'detect-face',
     message: 'Please position your face within the frame',
   },
-  { step: 'smile', message: 'Please smile' },
-  { step: 'open-mouth', message: 'Keep your eyes and your mouth open' },
-  { step: 'complete', message: 'Done' },
+  { id: 1, step: 'smile', message: 'Please smile' },
+  { id: 2, step: 'open-mouth', message: 'Keep your eyes and your mouth open' },
+  { id: 3, step: 'complete', message: 'Done' },
 ];
 
 const LiveCapture = () => {
@@ -34,6 +35,7 @@ const LiveCapture = () => {
 
   const [ready, setReady] = useState(false);
   const [currentStep, setCurrentStep] = useState<{
+    id: number;
     step: Step;
     message: string;
   }>();
@@ -438,7 +440,7 @@ const LiveCapture = () => {
           </div>
         </div>
 
-        <div className="relative h-full  mt-4">
+        <div className="relative h-full mt-4">
           <AnimatePresence>
             <motion.div
               key={currentStep?.step}
@@ -448,21 +450,22 @@ const LiveCapture = () => {
               transition={{ duration: 0.5 }}
               style={{ position: 'absolute', width: '100%' }}
             >
-              {!!currentStep?.message && (
-                <Body center>
+              <Title center>
+                {currentStep?.message || 'Press Ready to begin capture'}
+              </Title>
+
+              {!!currentStep?.message && currentStep.id === 0 && (
+                <Body className="mt-4 text-xs" center>
                   {' '}
                   Not detecting your face?{' '}
                   <span
                     className="text-blue-500 cursor-pointer"
                     onClick={() => window.location.reload()}
                   >
-                    Reload page
+                    Reload models
                   </span>
                 </Body>
               )}
-              <Title center>
-                {currentStep?.message || 'Press Ready to begin capture'}
-              </Title>
             </motion.div>
           </AnimatePresence>
         </div>
