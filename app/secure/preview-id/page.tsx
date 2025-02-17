@@ -5,30 +5,23 @@ import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import useStore from '@/store/store';
 
 const PreviewId = () => {
-  const pathname = usePathname();
-  const { currentStage, stageData, verificationStages, updateCurrentStage } =
-    useStore();
+  const router = useRouter();
+  const { stageData, updateCurrentStage } = useStore();
 
   const navigateToRetake = () => {
     router.replace('capture-id');
   };
   const navigateToNext = () => {
-    router.push(stageData?.startRoute);
+    router.push(stageData?.nextStageRoute as string);
   };
 
+  // UPDATE CURRENT STAGE
   useEffect(() => {
-    // Update StageData with the next stage if this is the endRoute of the current stage
-    if (stageData?.endRoute === pathname) {
-      console.log('PP', verificationStages);
-      updateCurrentStage(verificationStages[currentStage + 1]);
-    }
+    updateCurrentStage('DOCUMENT_CAPTURE');
   }, []);
-
-  const router = useRouter();
   return (
     <>
       {/* Header */}

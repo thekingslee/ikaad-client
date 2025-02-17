@@ -22,13 +22,14 @@ export type VericationStageTypes =
   | 'BVN'
   | 'FINISH';
 
-export type VerificationsMap = {
+export type VerificationsStage = {
   stage: VericationStageTypes;
-  startRoute: string;
-  endRoute: string;
+  route: string;
+  nextStageRoute: string;
+  completed: boolean;
 };
 
-export const verificationsMap: VerificationsMap[] = [
+export const allVerificationsStageData: any[] = [
   {
     stage: 'START' as VericationStageTypes,
     startRoute: '/secure/prestart',
@@ -63,19 +64,10 @@ export const verificationsMap: VerificationsMap[] = [
 //   VERIFICATION_STAGES: ['START', 'LIVELINESS_TEST', 'BVN'],
 // };
 
-interface StoreState {
-  currentStage: number;
-  stageData: VerificationsMap;
-  verificationStages: VericationStageTypes[];
-
-  setVerificationStages: (stages: VericationStageTypes[]) => void; // Updated once in a verification live cycle
-  updateCurrentStage: (stage: VericationStageTypes) => void;
-}
-
-// Retrieve verificationStages from session storage
-const storedVerificationStages =
+// Retrieve generatedVerificationMap from session storage
+const storedGeneratedVerificationMap =
   typeof window !== 'undefined'
-    ? JSON.parse(sessionStorage.getItem('verificationStages') || '[]')
+    ? JSON.parse(sessionStorage.getItem('generatedVerificationMap') || '[]')
     : [];
 
 // Retrieve currentStage from session storage
@@ -84,26 +76,50 @@ const storedCurrentStage =
     ? JSON.parse(sessionStorage.getItem('currentStage') || '0')
     : 0;
 
+// ################################################
+// ##########     HOW TO USE THE STORE   ##########
+// ################################################
+
+// When you are on the last route of a stage:
+// 1. Navigate to the next stage route using: stageData.nextStageRoute
+// 2. Mark the current stage as completed by updating: generatedVerificationMap[currentStage].completed to true
+
+// When on the first stage:
+// 1. updateCurrentStage()
+
+interface StoreState {
+  currentStage: number;
+  stageData: VerificationsStage;
+  generatedVerificationMap: VerificationsStage[];
+
+  setVerificationStages: (stages: VericationStageTypes[]) => void; // Updated once in a verification live cycle
+  updateCurrentStage: (stage?: VericationStageTypes) => void;
+}
+
+// Current Stage and Stage data are set at a StageMap start-route
 const useStore = create<StoreState>((set) => ({
   currentStage: storedCurrentStage,
-  stageData:
-    verificationsMap.find(
-      (item) => item.stage === storedVerificationStages[storedCurrentStage]
-    ) || ({} as VerificationsMap),
-  verificationStages: storedVerificationStages as VericationStageTypes[],
+  stageData: storedGeneratedVerificationMap[
+    storedCurrentStage
+  ] as VerificationsStage,
+  generatedVerificationMap:
+    storedGeneratedVerificationMap as VerificationsStage[],
 
-  updateCurrentStage: (stage: VericationStageTypes) =>
+  updateCurrentStage: (stage?: VericationStageTypes) =>
     set((state) => {
-      let newStage = state.currentStage;
-      let stageData = {} as VerificationsMap;
-      if (state.verificationStages.length <= state.currentStage) {
+      let newStage = state.currentStage; // Default stage to what is on state
+      let stageData = {} as VerificationsStage;
+      if (state.generatedVerificationMap.length <= state.currentStage) {
         return state;
       }
 
-      newStage = state.verificationStages.indexOf(stage);
-      stageData =
-        verificationsMap.find((item) => item.stage === stage) ||
-        ({} as VerificationsMap);
+      // Find new stage based in stage passed as a parameter
+      newStage = state.generatedVerificationMap.findIndex(
+        (item) => item.stage === stage
+      );
+
+      // Update the stageData based on the new stage
+      stageData = state.generatedVerificationMap[newStage];
 
       // Save the current stage to session storage
       sessionStorage.setItem('currentStage', JSON.stringify(newStage));
@@ -115,11 +131,34 @@ const useStore = create<StoreState>((set) => ({
     }),
 
   setVerificationStages: (stages: VericationStageTypes[]) => {
+    // Using the parameter stages, generate a verification Map
+    const generatedVerificationMap = stages?.map(
+      (stage: VericationStageTypes, index: number) => {
+        const stageIndex = allVerificationsStageData.findIndex(
+          (item) => item.stage === stage
+        );
+        const nextStageIndex = allVerificationsStageData.findIndex(
+          (item) => item.stage === stages[index + 1]
+        );
+
+        return {
+          stage: stage,
+          route: allVerificationsStageData[stageIndex]?.startRoute || '',
+          nextStageRoute:
+            allVerificationsStageData[nextStageIndex]?.startRoute || '',
+          completed: false,
+        };
+      }
+    );
+
     // Save verificationStages to session storage
-    sessionStorage.setItem('verificationStages', JSON.stringify(stages));
+    sessionStorage.setItem(
+      'generatedVerificationMap',
+      JSON.stringify(generatedVerificationMap)
+    );
 
     set(() => ({
-      verificationStages: stages,
+      generatedVerificationMap,
     }));
   },
 }));

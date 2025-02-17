@@ -5,11 +5,15 @@ import ReuseButton from '@/app/components/ReuseButton';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import useStore from '@/store/store';
 import { useEffect, useState } from 'react';
 
 const CameraPermission = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const { updateCurrentStage } = useStore();
 
   const [cameraAccess, setCameraAccess] = useState<boolean>(false);
 
@@ -34,6 +38,13 @@ const CameraPermission = () => {
   useEffect(() => {
     requestCameraAccess();
   }, []);
+
+  // UPDATE CURRENT STAGE
+  useEffect(() => {
+    updateCurrentStage('LIVELINESS_TEST');
+  }, []);
+
+  // console.log('CURRENT', stageData);
 
   return (
     <>

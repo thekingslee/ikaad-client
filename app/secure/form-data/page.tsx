@@ -13,10 +13,13 @@ import ReuseButton from '@/app/components/ReuseButton';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import useUserDataStore from '@/store/userData';
+import useStore from '@/store/store';
+import { useEffect } from 'react';
 
 const FormData = () => {
   const router = useRouter();
   const { userData, setUserData } = useUserDataStore();
+  const { updateCurrentStage } = useStore();
 
   const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),
@@ -37,6 +40,11 @@ const FormData = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  // UPDATE CURRENT STAGE
+  useEffect(() => {
+    updateCurrentStage('BVN');
+  }, []);
 
   return (
     <>

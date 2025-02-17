@@ -6,10 +6,12 @@ import ReuseDrawer from '@/app/components/ReuseDrawer';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import useStore from '@/store/store';
 
 const Finish = () => {
   const router = useRouter();
+  const { updateCurrentStage } = useStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const endFlow = () => {
@@ -17,6 +19,11 @@ const Finish = () => {
     // Navigate to home "/"
     router.push('/');
   };
+
+  // UPDATE CURRENT STAGE
+  useEffect(() => {
+    updateCurrentStage('FINISH');
+  }, []);
 
   return (
     <>

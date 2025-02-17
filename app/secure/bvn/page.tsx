@@ -13,15 +13,13 @@ import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import useUserDataStore from '@/store/userData';
 import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import useStore from '@/store/store';
 
 const BVN = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const { userData, setUserData } = useUserDataStore();
-  const { currentStage, stageData, verificationStages, updateCurrentStage } =
-    useStore();
+  const { stageData, updateCurrentStage } = useStore();
 
   const form = useForm<z.infer<typeof bnvSchema>>({
     resolver: zodResolver(bnvSchema),
@@ -31,7 +29,7 @@ const BVN = () => {
   });
 
   const navigateToNext = () => {
-    router.push(stageData?.startRoute);
+    router.push(stageData?.nextStageRoute as string);
   };
 
   function onSubmit(values: z.infer<typeof bnvSchema>) {
@@ -48,15 +46,10 @@ const BVN = () => {
     console.log(values);
   }
 
+  // UPDATE CURRENT STAGE
   useEffect(() => {
-    // Update StageData with the next stage if this is the endRoute of the current stage
-    if (stageData?.endRoute === pathname) {
-      updateCurrentStage(verificationStages[currentStage + 1]); // TODO: Have a more sustainable approach
-    }
+    updateCurrentStage('BVN');
   }, []);
-
-  console.log('stageData', stageData);
-  console.log('verificationStages', verificationStages);
 
   return (
     <>

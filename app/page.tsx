@@ -18,7 +18,13 @@ type verificationEntry = {
 
 export default function Home() {
   const router = useRouter();
-  const { stageData, setVerificationStages, updateCurrentStage } = useStore();
+  const {
+    currentStage,
+    stageData,
+    generatedVerificationMap,
+    setVerificationStages,
+    updateCurrentStage,
+  } = useStore();
   const routeRef = useRef<string | null>(null);
 
   const verificationEntry: verificationEntry[] = [
@@ -42,15 +48,19 @@ export default function Home() {
   const handleVerification = (item: verificationEntry) => {
     setVerificationStages(item?.verification_stages);
     updateCurrentStage(item?.verification_stages[0]);
-    routeRef.current = 'done';
+    routeRef.current = 'set';
   };
 
   useEffect(() => {
-    if (stageData?.startRoute && routeRef.current) {
+    if (stageData?.route && routeRef.current) {
       routeRef.current = null;
-      router.push(stageData?.startRoute);
+      router.push(stageData?.route);
     }
   }, [stageData, routeRef.current]);
+
+  console.log('currentStage', currentStage);
+  console.log('stageData', stageData);
+  console.log('generatedVerificationMap', generatedVerificationMap);
 
   return (
     <>

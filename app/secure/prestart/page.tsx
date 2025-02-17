@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useStore from '@/store/store';
+import useStore, {
+  allVerificationsStageData,
+  VericationStageTypes,
+} from '@/store/store';
 import Title from '@/components/atoms/Title';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
@@ -21,7 +24,7 @@ import useDeviceType from '@/hooks/useDeviceType';
 const PreStartPage: React.FC = () => {
   const router = useRouter();
   const { deviceType } = useDeviceType();
-  const { verificationStages, setVerificationStages } = useStore();
+  const { setVerificationStages } = useStore();
 
   const form = useForm<z.infer<typeof preStartSchema>>({
     resolver: zodResolver(preStartSchema),
@@ -49,10 +52,46 @@ const PreStartPage: React.FC = () => {
   useEffect(() => {
     // Get verificationStages from URL
     const url = new URL(window.location.href);
-    const stagesParam = url.searchParams.get('verificationStages');
+    const stagesParam = url.searchParams.get('verification-stages');
+
     if (stagesParam) {
       const stages = JSON.parse(decodeURIComponent(stagesParam));
-      sessionStorage.setItem('verificationStages', JSON.stringify(stages));
+      // Check is the content of the stages are of type VericationStageTypes
+      if (
+        !stages.every(
+          (stage: VericationStageTypes) =>
+            stage === 'START' ||
+            stage === 'LIVELINESS_TEST' ||
+            stage === 'DOCUMENT_CAPTURE' ||
+            stage === 'BVN' ||
+            stage === 'FINISH'
+        )
+      ) {
+        // TODO: Redirect to a error screen
+        return;
+      }
+      const generatedVerificationMap = stages?.map(
+        (stage: VericationStageTypes) => {
+          const stageIndex = allVerificationsStageData.findIndex(
+            (item) => item.stage === stage
+          );
+          return {
+            stage: stage,
+            route: allVerificationsStageData[stageIndex]?.startRoute || '',
+            nextStageRoute:
+              allVerificationsStageData[stageIndex + 1]?.startRoute || '',
+            completed: false,
+          };
+        }
+      );
+
+      sessionStorage.setItem(
+        'generatedVerificationMap',
+        JSON.stringify(generatedVerificationMap)
+      );
+
+      // Save the current stage to session storage
+      sessionStorage.setItem('currentStage', JSON.stringify(0));
       setVerificationStages(stages);
 
       // Remove verificationStages from URL
@@ -61,10 +100,6 @@ const PreStartPage: React.FC = () => {
       window.history.replaceState(null, '', newUrl);
     }
   }, []);
-
-  useEffect(() => {
-    console.log('Verification Stages*', verificationStages);
-  }, [verificationStages]);
 
   useEffect(() => {
     const handleResize = () => {

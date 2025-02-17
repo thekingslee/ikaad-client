@@ -8,30 +8,23 @@ import Title from '@/components/atoms/Title';
 import { Form } from '@/components/ui/form';
 import FormFieldComponent from '@/app/components/FormField';
 import { z } from 'zod';
+import React, { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { docUploadSchema } from '@/common/FormSchema';
 import { useRouter } from 'next/navigation';
+import useStore from '@/store/store';
 
 const UploadId = () => {
   const router = useRouter();
+  const { stageData, updateCurrentStage } = useStore();
   const form = useForm<z.infer<typeof docUploadSchema>>({
     resolver: zodResolver(docUploadSchema),
     defaultValues: {
       doc: undefined,
     },
   });
-
-  /*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Handle form submission.
-   *
-   * @param {z.infer<typeof docUploadSchema>} values - Form values.
-   * @return {void}
-   */
-  /******  ab90168a-b717-49ba-b16d-b45c2722da67  *******/ function onSubmit(
-    values: z.infer<typeof docUploadSchema>
-  ) {
+  function onSubmit(values: z.infer<typeof docUploadSchema>) {
     // Navigate to home "/"
     // router.push('/');
 
@@ -39,6 +32,15 @@ const UploadId = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  const navigateToNext = () => {
+    router.push(stageData?.nextStageRoute as string);
+  };
+
+  // UPDATE CURRENT STAGE
+  useEffect(() => {
+    updateCurrentStage('DOCUMENT_CAPTURE');
+  }, []);
 
   return (
     <>
@@ -72,7 +74,9 @@ const UploadId = () => {
 
       {/* Footer */}
       <footer>
-        <ReuseButton variant="default">Upload</ReuseButton>
+        <ReuseButton variant="default" action={() => navigateToNext()}>
+          Upload
+        </ReuseButton>
         <ReuseButton
           variant="secondary"
           action={() => router.push('capture-id')}
