@@ -1,14 +1,15 @@
 'use client';
 
+import Image from 'next/image';
+
 import ReuseButton from '@/app/components/ReuseButton';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 
 import { Form } from '@/components/ui/form';
-import FormFieldComponent from '@/app/components/FormField';
 import { z } from 'zod';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { docUploadSchema } from '@/common/FormSchema';
@@ -37,6 +38,23 @@ const UploadId = () => {
     router.push(stageData?.nextStageRoute as string);
   };
 
+  const [image, setImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file && file.type.startsWith('image/')) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    } else {
+      alert('Please select an image file.');
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
   // UPDATE CURRENT STAGE
   useEffect(() => {
     updateCurrentStage('DOCUMENT_CAPTURE');
@@ -58,15 +76,30 @@ const UploadId = () => {
       </header>
 
       {/* Main */}
-      <main className="px-4 ">
+      <main className="px-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormFieldComponent
-              form={form}
-              name="doc"
-              label="Upload an image of your ID card"
-              placeholder="Click here to upload document"
+            <div
+              className="h-[150px] flex items-center justify-center border border-dotted cursor-pointer relative"
+              onClick={handleClick}>
+              {image ? (
+                <Image
+                  src={image}
+                  alt="Uploaded image"
+                  layout="fill"
+                  className="object-contain"
+                />
+              ) : (
+                <p>Click here to upload image</p>
+              )}
+            </div>
+            <input
               type="file"
+              accept="image/*"
+              name="img"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
             />
           </form>
         </Form>
@@ -79,8 +112,7 @@ const UploadId = () => {
         </ReuseButton>
         <ReuseButton
           variant="secondary"
-          action={() => router.push('capture-id')}
-        >
+          action={() => router.push('capture-id')}>
           Capture Instead
         </ReuseButton>
 
