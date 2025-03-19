@@ -15,10 +15,12 @@ import { useForm } from 'react-hook-form';
 import { docUploadSchema } from '@/common/FormSchema';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store/store';
+import useUploadIdStore from '@/store/uploadIdStore';
 
 const UploadId = () => {
   const router = useRouter();
   const { stageData, updateCurrentStage } = useStore();
+  const { uploadId, setUploadId } = useUploadIdStore();
   const form = useForm<z.infer<typeof docUploadSchema>>({
     resolver: zodResolver(docUploadSchema),
     defaultValues: {
@@ -38,14 +40,19 @@ const UploadId = () => {
     router.push(stageData?.nextStageRoute as string);
   };
 
-  const [image, setImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if (file && file.type.startsWith('image/')) {
+    if (
+      file &&
+      file.type.startsWith('image/') &&
+      !file.type.endsWith('svg+xml')
+    ) {
       const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
+
+      setUploadId(imageUrl);
+      router.push('/secure/preview-id');
     } else {
       alert('Please select an image file.');
     }
@@ -80,18 +87,9 @@ const UploadId = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div
-              className="h-[150px] flex items-center justify-center border border-dotted cursor-pointer relative"
+              className="h-[50vh] max-h-[408px] flex items-center justify-center border border-dotted cursor-pointer relative"
               onClick={handleClick}>
-              {image ? (
-                <Image
-                  src={image}
-                  alt="Uploaded image"
-                  layout="fill"
-                  className="object-contain"
-                />
-              ) : (
-                <p>Click here to upload image</p>
-              )}
+              <p>Click here to upload image</p>
             </div>
             <input
               type="file"

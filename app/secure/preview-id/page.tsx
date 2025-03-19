@@ -5,11 +5,14 @@ import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 import useStore from '@/store/store';
+import useUploadIdStore from '@/store/uploadIdStore';
 
 const PreviewId = () => {
   const router = useRouter();
   const { stageData, updateCurrentStage } = useStore();
+  const { uploadId } = useUploadIdStore();
 
   const navigateToRetake = () => {
     router.replace('capture-id');
@@ -40,8 +43,14 @@ const PreviewId = () => {
 
       {/* Main */}
       <main className="px-4 ">
-        <div className="h-52 w-full border-4 border-stone-900 mx-auto rounded-xl">
+        <div className="h-52 w-full border-4 border-stone-900 mx-auto rounded-xl relative">
           {/* Image goes here */}
+          <Image
+            src={uploadId}
+            alt="Uploaded ID"
+            layout="fill"
+            className="object-cover"
+          />
         </div>
       </main>
 
