@@ -16,8 +16,6 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import ShareModal from '@/app/components/ShareModal';
 import { Share2 } from 'lucide-react';
-import bvnIcon from '@/assets/security.svg';
-import cardIcon from '@/assets/card.svg';
 
 type verificationEntry = {
   title: string;
@@ -60,13 +58,13 @@ const Home = () => {
   const verificationEntry: verificationEntry[] = [
     {
       title: 'BVN Verification',
-      img: bvnIcon,
+      img: '/images/security.svg',
       body: 'Confirm your identity using BVN to prevent fraud and unauthorized access.',
       verification_stages: ['START', 'LIVELINESS_TEST', 'BVN', 'FINISH'],
     },
     {
       title: 'Document Verification',
-      img: cardIcon,
+      img: '/images/card.svg',
       body: 'Upload and scan your official ID to confirm your identity.',
       verification_stages: [
         'START',

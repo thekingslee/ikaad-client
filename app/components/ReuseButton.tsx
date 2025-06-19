@@ -5,7 +5,7 @@ type ButtonProps = {
   action?: () => void;
   children?: React.ReactNode;
   className?: string;
-  variant?: 'secondary' | 'ghost' | 'default';
+  variant?: 'secondary' | 'ghost' | 'default' | 'outline';
   disabled?: boolean;
 };
 const ReuseButton = ({
@@ -19,7 +19,7 @@ const ReuseButton = ({
     <Button
       className={clsx(
         className,
-        'mb-2 rounded-full w-full py-6 font-semibold bg-custom hover:bg-custom-hover text-custom-text shadow-none'
+        'mb-2 rounded-full w-full py-6 font-semibold  shadow-none'
       )}
       onClick={action}
       variant={variant || 'default'}

@@ -12,6 +12,7 @@ import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Subtitle from '@/components/atoms/Subtitle';
 import ReuseButton from '@/app/components/ReuseButton';
+import QRCode from '@/app/components/QRCode';
 
 import { Form } from '@/components/ui/form';
 import FormFieldComponent from '@/app/components/FormField';
@@ -129,7 +130,7 @@ const PreStartPage: React.FC = () => {
         <ReuseNav />
 
         <Title center className="mt-6">
-          Let’s get you started
+          Let's get you started
         </Title>
 
         <Body center>
@@ -140,17 +141,23 @@ const PreStartPage: React.FC = () => {
 
       {/* Body */}
       <main>
-        <div className="bg-stone-100 p-4 rounded-lg text-sm text-left mb-4 grid grid-cols-[auto_1fr] gap-4">
-          <figure className="h-24 w-24 bg-stone-300 rounded-md"></figure>
-          <div className="w-auto">
+        <div className="bg-[#FFFEFD] border border-textbody/50 rounded-lg text-sm text-left mb-4 grid grid-cols-[auto_1fr] gap-4 overflow-hidden py-3">
+          <QRCode
+            value={window.location.href}
+            size={120}
+            className="h-28 w-28 rounded-md relative top-[-4px]"
+          />
+          <div className="w-auto py-4">
             <Subtitle>Scanning QR code</Subtitle>
             <Body className="text-xs">
               Scan the QR code with your camera app
             </Body>
           </div>
         </div>
+      </main>
 
-        <div className="bg-stone-100 p-4 rounded-lg text-sm text-left">
+      <footer>
+        <div className="bg-[#FFF8E8]/50 border border-textbody/20 p-4 rounded-lg text-sm text-left mb-4">
           <Subtitle>Send link via email</Subtitle>
           <Body className="text-xs">
             A link will be sent to your email address to start verification
@@ -177,12 +184,9 @@ const PreStartPage: React.FC = () => {
             </ReuseButton>
           </div>
         </div>
-      </main>
-
-      <footer>
         <Body center className="text-xs mt-2">
-          Don’t have a smartphone?{' '}
-          <Link href={'start'} className="text-blue-500">
+          Don't have a smartphone?{' '}
+          <Link href={'start'} className="text-custom-text underline">
             Continue with the device
           </Link>
         </Body>

@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import ReuseDrawer from './ReuseDrawer';
+import StatusTablet from './StatusTablet';
 import { Button } from '@/components/ui/button';
 
 type TableProps = {
@@ -20,7 +21,7 @@ type TableProps = {
 const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
   return (
     <div className="container w-[420px] overflow-x-auto sm:w-auto mx-auto">
-      <Table className="w-full">
+      <Table className="w-full h-full ">
         {/* <TableCaption className="text-left">
           A list of your recent applications.
         </TableCaption> */}
@@ -35,36 +36,43 @@ const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
             <TableHead className="whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="">
           {data.map((item: any, index: number) => (
-            <TableRow
-              key={item.id + index}
-              onClick={() => {
-                setSelected(item);
-                setOpen(true);
-              }}
-              className="cursor-pointer"
-            >
-              <TableCell className="font-medium whitespace-nowrap">
-                {item?.last_name + ' ' + item?.first_name}
-              </TableCell>
+            <>
+              <TableRow
+                key={item.id + index}
+                onClick={() => {
+                  setSelected(item);
+                  setOpen(true);
+                }}
+                className="cursor-pointer "
+              >
+                <TableCell className="font-medium whitespace-nowrap">
+                  {item?.last_name + ' ' + item?.first_name}
+                </TableCell>
 
-              <TableCell className="whitespace-nowrap">
-                {item?.reference_id}
-              </TableCell>
+                <TableCell className="whitespace-nowrap">
+                  {item?.reference_id}
+                </TableCell>
 
-              <TableCell className="whitespace-nowrap">
-                {item?.status}
-              </TableCell>
+                <TableCell className="whitespace-nowrap">
+                  <StatusTablet status={item?.status || 'pending'} />
+                </TableCell>
 
-              {/* <TableCell className="whitespace-nowrap">{item?.date}</TableCell> */}
+                {/* <TableCell className="whitespace-nowrap">{item?.date}</TableCell> */}
 
-              <TableCell className="whitespace-nowrap">
-                <Button variant="outline" className="text-xs">
-                  View application
-                </Button>
-              </TableCell>
-            </TableRow>
+                <TableCell className="whitespace-nowrap">
+                  <Button
+                    variant="outline"
+                    className="text-xs text-custom-text"
+                  >
+                    View application
+                  </Button>
+                </TableCell>
+              </TableRow>
+
+              <div className="min-h-[40px]"></div>
+            </>
           ))}
         </TableBody>
       </Table>

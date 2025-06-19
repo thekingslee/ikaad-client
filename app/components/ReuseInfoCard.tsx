@@ -5,7 +5,7 @@ import '../../styles/glow.scss';
 const ReuseInfoCard = ({
   data,
 }: {
-  data: { title: string; body: string | number }[];
+  data: { title: string; body: string | number | React.ReactNode }[];
 }) => {
   function renderTextAsSpans(text: string) {
     return text

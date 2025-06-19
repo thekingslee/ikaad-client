@@ -13,6 +13,7 @@ import Body from '@/components/atoms/Body';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { Application } from '@/services/applications';
 import '../../styles/glow.css';
+import StatusTablet from './StatusTablet';
 
 const ReuseDrawer = ({
   // children,
@@ -91,7 +92,11 @@ const ReuseDrawer = ({
   const verificationResult = [
     {
       title: 'Verification Verdit',
-      body: data.status,
+      body: (
+        <StatusTablet
+          status={(data?.status as 'pending' | 'success' | 'fail') || 'pending'}
+        />
+      ),
     },
     {
       title: 'Reason for failure',
@@ -120,8 +125,12 @@ amet maiores, fugit minus quibusdam eligendi aspernatur tenetur.`;
       {/* <DrawerTrigger>tap</DrawerTrigger> */}
       <DrawerContent className="bg-white mx-2 mb-2 rounded-t-3xl rounded-b-xl">
         <div
-          className=" mt-6 w-full sm:w-[420px] mx-auto overflow-y-scroll scrollbar-hide "
-          style={{ height: 'calc(100vh - 100px)' }}
+          className="mt-6 w-full sm:w-[420px] mx-auto overflow-y-scroll hide-scrollbar"
+          style={{
+            height: 'calc(100vh - 100px)',
+            scrollbarWidth: 'none' /* Firefox */,
+            msOverflowStyle: 'none' /* IE and Edge */,
+          }}
         >
           <DrawerHeader>
             <DialogTitle className="text-2xl font-semibold text-stone-900 mb-1 text-center">

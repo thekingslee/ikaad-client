@@ -40,9 +40,11 @@ const ConfirmVideo = () => {
         <ReuseNav />
       </header>
 
+      {/* TODO: Upload video recorded to BE */}
+
       {/* Body */}
       <main className="px-8 h-full">
-        <div className="w-full h-auto bg-stone-900 border-4 border-green-500 mx-auto relative overflow-hidden rounded-full aspect-square">
+        <div className="w-full h-auto border-4 border-custom-green p-1 mx-auto relative overflow-hidden rounded-full aspect-square">
           <video
             crossOrigin="anonymous"
             height="694"
@@ -52,6 +54,7 @@ const ConfirmVideo = () => {
             playsInline={true}
             autoPlay
             loop
+            className="rounded-full"
           ></video>
         </div>
 
@@ -67,7 +70,7 @@ const ConfirmVideo = () => {
       {/* Footer */}
       <footer>
         <div className="grid gap-2">
-          <ReuseButton action={navigateToRetake} variant="secondary">
+          <ReuseButton action={navigateToRetake} variant="outline">
             Retake
           </ReuseButton>
           <ReuseButton action={navigateToNext}>Continue</ReuseButton>

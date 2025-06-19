@@ -31,8 +31,8 @@ const Start = () => {
 
         <Image
           aria-hidden
-          src="/globe.svg"
-          alt="Globe icon"
+          src="/images/logo.svg"
+          alt="iSecure logo"
           width={40}
           height={40}
           className="mx-auto mt-6"
@@ -41,7 +41,7 @@ const Start = () => {
 
       {/* Body */}
       <main>
-        <div className="bg-stone-100 p-4 rounded-lg text-sm text-left mb-4 ">
+        <div className="bg-[#FFFEFD] border border-textbody/50 p-4 rounded-lg text-sm text-left mb-4 ">
           <Subtitle>Before You Start, Please Ensure:</Subtitle>
           <Body className="text-xs mb-1">
             Good Lighting: Be in a well-lit environment.

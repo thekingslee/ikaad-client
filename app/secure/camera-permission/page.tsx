@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import ReuseAlert from '@/app/components/ReuseAlert';
 import ReuseButton from '@/app/components/ReuseButton';
 import ReuseNav from '@/app/components/ReuseNav';
@@ -52,31 +53,46 @@ const CameraPermission = () => {
       <header>
         <ReuseNav />
 
-        <Title center className=" mt-6">
+        <Image
+          aria-hidden
+          src="/images/camera.svg"
+          alt="iSecure camera"
+          width={40}
+          height={40}
+          className="mx-auto h-16 w-16"
+        />
+
+        <Title center className=" mt-4">
           Camera Access Needed
         </Title>
 
-        <Body center>
-          We need access to your camera for security verification.
-        </Body>
+        <div className="px-4 mt-2">
+          <p className="mb-4 text-stone-600 text-sm">
+            To ensure the security and integrity of your account, we request
+            access to your device's camera for:
+          </p>
+          <ol className="list-decimal list-inside space-y-2 mb-4">
+            <li className="text-sm text-stone-600">
+              <span className="font-medium">Face Recognition:</span> To confirm
+              your identity.
+            </li>
+            <li className="text-sm text-stone-600">
+              <span className="font-medium">Document Scan:</span> To verify your
+              credentials.
+            </li>
+          </ol>
+        </div>
       </header>
 
       {/* Body */}
-      <main className="p-4">
-        <Body className="mb-4">
-          To ensure the security and integrity of your account, we request
-          access to your device’s camera for::
-        </Body>
-        <Body>1. Face Recognition: To confirm your identity.</Body>
-        <Body>2. Document Scan: To verify your credentials.</Body>
-
-        <ReuseAlert title="Your Privacy is Safe" className="mt-4">
-          Your data is encrypted and used only for verification.
-        </ReuseAlert>
-      </main>
+      <main className="p-4"></main>
 
       {/* Footer */}
       <footer>
+        <ReuseAlert title="Your Privacy is Safe" className="mt-4 mb-4">
+          Your data is encrypted and used only for verification.
+        </ReuseAlert>
+
         <ReuseButton action={navigateToNext} disabled={!cameraAccess}>
           Continue
         </ReuseButton>

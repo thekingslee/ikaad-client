@@ -58,6 +58,7 @@ export default {
           DEFAULT: 'hsl(var(--btn-bg))',
           hover: 'hsl(var(--btn-bg-hover))',
           text: 'hsl(var(--btn-text))',
+          green: '#65C466',
         },
       },
       borderRadius: {

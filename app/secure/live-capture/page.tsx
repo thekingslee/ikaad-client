@@ -11,6 +11,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
 import * as faceapi from 'face-api.js';
 import useVideoRecorder from '@/hooks/useVideoRecorder';
+import { useSnapshotCapture } from '@/hooks/useSnapshotCapture';
+import { useAuth } from '@/context/AuthContext';
 
 type Step = 'detect-face' | 'smile' | 'open-mouth' | 'complete';
 const flow: { id: number; step: Step; message: string }[] = [
@@ -26,6 +28,7 @@ const flow: { id: number; step: Step; message: string }[] = [
 
 const LiveCapture = () => {
   const router = useRouter();
+  const { user } = useAuth();
 
   // const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -40,6 +43,12 @@ const LiveCapture = () => {
     message: string;
   }>();
   const [detectionData, setDetectionData] = useState<any>({});
+
+  // Use the custom hook for snapshot capture
+  const { captureAndUploadSnapshot } = useSnapshotCapture({
+    videoRef,
+    canvasRef,
+  });
 
   const getVideo = useCallback(async () => {
     if (videoRef.current) {
@@ -161,7 +170,7 @@ const LiveCapture = () => {
         currentStep?.step === 'detect-face' &&
         detectionData?.detection?._score >= 0.5
       ) {
-        console.log('✅ Test1 Pass:: Face detected');
+        // console.log('✅ Test1 Pass:: Face detected');
         setCurrentStep(flow[1]);
       }
 
@@ -170,7 +179,9 @@ const LiveCapture = () => {
         currentStep?.step === 'smile' &&
         detectionData?.expressions?.happy >= 0.95
       ) {
-        console.log('✅ Test2 Pass:: Smile detected');
+        // console.log('✅ Test2 Pass:: Smile detected');
+        // Capture and upload snapshot
+        captureAndUploadSnapshot();
         setCurrentStep(flow[2]);
       }
 
@@ -180,7 +191,7 @@ const LiveCapture = () => {
         detectionData?.expressions?.surprised >= 0.005
         // some condition to check if the user open mouth
       ) {
-        console.log('✅ Test3 Pass:: Open mouth detected');
+        // console.log('✅ Test3 Pass:: Open mouth detected');
         completeOpenMouthTest();
         setCurrentStep(flow[3]);
 
@@ -290,7 +301,7 @@ const LiveCapture = () => {
                     }}
                     className=""
                   >
-                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-custom-green flex items-center justify-center">
                       <Check
                         className="w-3 h-3 text-[#fff]"
                         strokeWidth={1.5}
@@ -331,7 +342,7 @@ const LiveCapture = () => {
                         : '0%',
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="h-[3px] w-4 bg-green-500"
+                  className="h-[3px] w-4 bg-custom-green"
                 ></motion.div>
               </div>
               {flow.findIndex((item) => item.step === currentStep?.step) >
@@ -349,7 +360,7 @@ const LiveCapture = () => {
                     }}
                     className=""
                   >
-                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-custom-green flex items-center justify-center">
                       <Check
                         className="w-3 h-3 text-[#fff]"
                         strokeWidth={1.5}
@@ -390,7 +401,7 @@ const LiveCapture = () => {
                         : '0%',
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="h-[3px] w-4 bg-green-500"
+                  className="h-[3px] w-4 bg-custom-green"
                 ></motion.div>
               </div>
               {flow.findIndex((item) => item.step === currentStep?.step) >
@@ -408,7 +419,7 @@ const LiveCapture = () => {
                     }}
                     className=""
                   >
-                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-custom-green flex items-center justify-center">
                       <Check
                         className="w-3 h-3 text-[#fff]"
                         strokeWidth={1.5}
@@ -459,7 +470,7 @@ const LiveCapture = () => {
                   {' '}
                   Not detecting your face?{' '}
                   <span
-                    className="text-blue-500 cursor-pointer"
+                    className="text-custom-text cursor-pointer underline"
                     onClick={() => window.location.reload()}
                   >
                     Reload models
@@ -491,7 +502,7 @@ const LiveCapture = () => {
         {!ready && <ReuseButton action={readyToStart}>Ready </ReuseButton>}
 
         <Body center className="text-xs mt-2">
-          Powered by <span className="text-stone-400">IKaad</span>
+          Powered by <span className="text-stone-400"> IKaad</span>
         </Body>
       </footer>
     </>

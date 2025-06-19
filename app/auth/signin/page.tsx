@@ -20,8 +20,6 @@ import { useAuth } from '@/context/AuthContext';
 import { setTokenInStorage } from '@/utils/auth';
 import { authService } from '@/services/auth';
 
-import Logo from '@/assets/logo.svg';
-
 const Signin = () => {
   const router = useRouter();
   const { login } = useAuth();
@@ -69,7 +67,7 @@ const Signin = () => {
       <header className="px-0 sm:px-4">
         <Image
           aria-hidden
-          src={Logo}
+          src="/images/logo.svg"
           alt="ISecure Logo"
           width={40}
           height={40}

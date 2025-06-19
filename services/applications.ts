@@ -29,6 +29,12 @@ export interface ApplicationsResponse {
   data: Application[];
 }
 
+export interface UploadSnapshotResponse {
+  status: string;
+  message: string;
+  data?: any;
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const applicationsService = {
@@ -44,6 +50,32 @@ export const applicationsService = {
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  },
+
+  uploadSnapshot: async (
+    file: Blob,
+    userId: number
+  ): Promise<UploadSnapshotResponse> => {
+    const token = getTokenFromStorage();
+
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const formData = new FormData();
+    formData.append('image', file, 'snapshot.jpg');
+
+    const { data } = await axios.post<UploadSnapshotResponse>(
+      `${API_URL}/applications/upload/${userId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       }

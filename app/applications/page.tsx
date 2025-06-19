@@ -10,7 +10,6 @@ import ReuseDrawer from '../components/ReuseDrawer';
 import ReuseNav from '../components/ReuseNav';
 import { applicationsService, Application } from '@/services/applications';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import lockIcon from '@/assets/lock.svg';
 
 // import { useMediaQuery } from "@/hooks/use-media-query"
 // const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -53,7 +52,7 @@ const ApplicationsPage: React.FC = () => {
         <ReuseNav />
         <Image
           aria-hidden
-          src={lockIcon}
+          src="/images/lock.svg"
           alt="Globe icon"
           width={40}
           height={40}

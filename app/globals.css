@@ -90,6 +90,38 @@ body {
     transform: translateZ(0);
     will-change: backdrop-filter;
   }
+
+  /* Hide scrollbar across all browsers */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  /* Target the table's inner div specifically */
+  .hide-scrollbar > div::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  /* Additional specificity for table scrollbars */
+  .hide-scrollbar table::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  /* Hide scrollbars on all child elements */
+  .hide-scrollbar *::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  /* Firefox scrollbar hiding for all elements */
+  .hide-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  /* Firefox scrollbar hiding for child elements */
+  .hide-scrollbar * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
 }
 
 /* Vaul drawer overrides */
