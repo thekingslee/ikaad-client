@@ -6,18 +6,31 @@ type ReuseAlertProps = {
   title: string;
   children: React.ReactNode;
   className?: string;
+  variant?: 'default' | 'danger';
 };
 
-const ReuseAlert = ({ title, children, className }: ReuseAlertProps) => {
+const ReuseAlert = ({
+  title,
+  children,
+  className,
+  variant = 'default',
+}: ReuseAlertProps) => {
   return (
     <div
       className={clsx(
         className,
-        'bg-stone-100 p-3 rounded-lg text-sm text-left'
+        'p-4 rounded-lg text-sm text-left',
+        variant === 'danger'
+          ? 'border border-red-500 bg-transparent text-red-500'
+          : 'border border-textbody/50 bg-[#FFFEFD]'
       )}
     >
-      <Subtitle>{title}</Subtitle>
-      <Body className="text-xs">{children}</Body>
+      <Subtitle className={variant === 'danger' ? 'text-red-500' : ''}>
+        {title}
+      </Subtitle>
+      <Body className={clsx('text-xs', variant === 'danger' && 'text-red-800')}>
+        {children}
+      </Body>
     </div>
   );
 };

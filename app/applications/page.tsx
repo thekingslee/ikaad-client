@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Body from '@/components/atoms/Body';
 import ReuseAlert from '../components/ReuseAlert';
@@ -8,56 +8,52 @@ import Title from '@/components/atoms/Title';
 import ReuseTable from '../components/ReuseTable';
 import ReuseDrawer from '../components/ReuseDrawer';
 import ReuseNav from '../components/ReuseNav';
-
-type Payment = {
-  id: string;
-  name: string;
-  reference_id: string;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  date: string;
-};
+import { applicationsService, Application } from '@/services/applications';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import lockIcon from '@/assets/lock.svg';
 
 // import { useMediaQuery } from "@/hooks/use-media-query"
 // const isDesktop = useMediaQuery("(min-width: 768px)")
 
 const ApplicationsPage: React.FC = () => {
-  const [selected, setSelected] = useState<Payment>();
   const [open, setOpen] = useState<boolean>(false);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [selectedApplication, setSelectedApplication] = useState<Application>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const applications: Payment[] = [
-    {
-      id: '728ed52f',
-      name: 'Olive Oil',
-      reference_id: '728ed52f',
-      status: 'pending',
-      date: 'm@example.com',
-    },
-    {
-      id: 'sdkljlsnd',
-      name: 'Olive Oil',
-      reference_id: '728ed52f',
-      status: 'pending',
-      date: 'm@example.com',
-    },
-    {
-      id: 'sdsdwe',
-      name: 'Olive Oil',
-      reference_id: '728ed52f',
-      status: 'pending',
-      date: 'm@example.com',
-    },
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await applicationsService.getApplications();
+        setApplications(response.data);
+      } catch (err) {
+        console.error('Error fetching applications:', err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An error occurred while fetching applications');
+        }
+        setApplications([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchApplications();
+  }, []);
 
-    // ...
-  ];
+  console.log('applications', applications);
 
   return (
-    <>
+    <ProtectedRoute>
       {/* Header */}
       <header>
         <ReuseNav />
         <Image
           aria-hidden
-          src="/globe.svg"
+          src={lockIcon}
           alt="Globe icon"
           width={40}
           height={40}
@@ -65,26 +61,41 @@ const ApplicationsPage: React.FC = () => {
         />
 
         <Title center className="mb-3">
-          Completed Applications
+          Your Applications
         </Title>
 
         <ReuseAlert title="Important Notice">
-          You are viewing sensitive user information. As a tester, it is your
-          responsibility to safeguard all data and ensure it remains
-          confidential.
+          The information displayed here is sensitive. As a tester, ensure all
+          information remains secure and confidential.
         </ReuseAlert>
       </header>
 
       {/* Body */}
       <main className="overflow-x-auto">
-        <ReuseTable
-          data={applications}
-          selected={selected}
-          setSelected={setSelected}
-          setOpen={setOpen}
-        />
+        {isLoading ? (
+          <div className="text-center py-8">
+            <Body>Loading applications...</Body>
+          </div>
+        ) : error ? (
+          <div className="text-center py-8">
+            <Body className="text-red-600">{error}</Body>
+          </div>
+        ) : (
+          <ReuseTable
+            data={applications}
+            selected={selectedApplication}
+            setSelected={setSelectedApplication}
+            setOpen={setOpen}
+          />
+        )}
 
-        <ReuseDrawer setOpen={setOpen} open={open} />
+        {selectedApplication && (
+          <ReuseDrawer
+            setOpen={setOpen}
+            open={open}
+            data={selectedApplication}
+          />
+        )}
       </main>
       {/* Footer */}
       <footer>
@@ -92,7 +103,7 @@ const ApplicationsPage: React.FC = () => {
           Powered by <span className="text-stone-400">IKaad</span>
         </Body>
       </footer>
-    </>
+    </ProtectedRoute>
   );
 };
 

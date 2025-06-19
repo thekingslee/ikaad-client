@@ -11,32 +11,36 @@ import ReuseInfoCard from './ReuseInfoCard';
 import Title from '@/components/atoms/Title';
 import Body from '@/components/atoms/Body';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
+import { Application } from '@/services/applications';
+import '../../styles/glow.css';
 
 const ReuseDrawer = ({
-  children,
+  // children,
   open,
   setOpen,
+  data,
 }: {
   children?: React.ReactNode;
   open: boolean;
   setOpen: (bol: boolean) => void;
+  data: Application;
 }) => {
   const personalInfo = [
     {
       title: 'User Fullname',
-      body: 'John Doe',
+      body: data?.last_name + ' ' + data?.first_name,
+    },
+    {
+      title: 'User id',
+      body: data?.id,
     },
     {
       title: 'Uploaded document type',
-      body: 'NIN Slip',
+      body: data.document_type,
     },
     {
       title: 'Card Authenticity Score',
-      body: '0.98',
-    },
-    {
-      title: 'NIN',
-      body: '22233345567',
+      body: data.card_authenticity_score,
     },
     {
       title: '',
@@ -44,57 +48,79 @@ const ReuseDrawer = ({
     },
   ];
 
+  if (data.document_type === 'nin') {
+    personalInfo.push({
+      title: 'NIN',
+      body: data.document as string,
+    });
+  }
+
   const faceMatchInfo = [
     {
       title: 'Facematch result',
-      body: 'The Facematch with document uploaded',
+      body:
+        data.face_match_score < 0.6 && data.face_match_score > 0.2
+          ? 'Match'
+          : 'No Match',
     },
     {
       title: 'Facematch Score',
-      body: '0.32',
+      body: data.face_match_score || 0.0,
     },
   ];
 
   const deviceInfo = [
     {
       title: 'Total time spent',
-      body: '3: 00',
+      body: 'e.g 3mins',
     },
     {
       title: 'Browser',
-      body: 'Chrome 132.0.0.0',
+      body: 'e.g Chrome 132.0.0.0',
     },
     {
       title: 'Operating System',
-      body: 'Mac OS, x64',
+      body: 'e.g Mac OS, x64',
     },
     {
       title: 'Device',
-      body: 'Mobile',
+      body: 'e.g Mobile',
     },
   ];
 
   const verificationResult = [
     {
       title: 'Verification Verdit',
-      body: 'Failed',
+      body: data.status,
     },
     {
       title: 'Reason for failure',
-      body: 'Face don’t match',
+      body: data.failure_reason,
     },
     {
       title: 'Refence ID',
-      body: 'KF-6DD84A4480',
+      body: data.reference_id,
     },
   ];
+
+  const aiOutputText = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non
+tenetur architecto optio! Quas nisi dolores, pariatur vero
+dignissimos id quisquam praesentium assumenda, provident quam,
+beatae minima vitae? Doloribus, dolorem veritatis unde officia,
+amet maiores, fugit minus quibusdam eligendi aspernatur tenetur.`;
+
+  function renderTextAsSpans(text: string) {
+    return text
+      .split('')
+      .map((char: string, idx: number) => <span key={idx}>{char}</span>);
+  }
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       {/* <DrawerTrigger>tap</DrawerTrigger> */}
-      <DrawerContent>
+      <DrawerContent className="bg-white mx-2 mb-2 rounded-t-3xl rounded-b-xl">
         <div
-          className="mt-6 w-full sm:w-[420px] mx-auto overflow-y-scroll"
+          className=" mt-6 w-full sm:w-[420px] mx-auto overflow-y-scroll scrollbar-hide "
           style={{ height: 'calc(100vh - 100px)' }}
         >
           <DrawerHeader>

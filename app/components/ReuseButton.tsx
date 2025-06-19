@@ -17,7 +17,10 @@ const ReuseButton = ({
 }: ButtonProps) => {
   return (
     <Button
-      className={clsx(className, 'mb-2 rounded-full w-full py-6')}
+      className={clsx(
+        className,
+        'mb-2 rounded-full w-full py-6 font-semibold bg-custom hover:bg-custom-hover text-custom-text shadow-none'
+      )}
       onClick={action}
       variant={variant || 'default'}
       disabled={disabled}

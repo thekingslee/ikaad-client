@@ -21,17 +21,17 @@ const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
   return (
     <div className="container w-[420px] overflow-x-auto sm:w-auto mx-auto">
       <Table className="w-full">
-        <TableCaption className="text-left">
+        {/* <TableCaption className="text-left">
           A list of your recent applications.
-        </TableCaption>
+        </TableCaption> */}
         <TableHeader>
           <TableRow className="bg-stone-100">
             <TableHead className="whitespace-nowrap">Name</TableHead>
             <TableHead className="whitespace-nowrap">Reference ID</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="whitespace-nowrap">
+            {/* <TableHead className="whitespace-nowrap">
               Date /Time Created
-            </TableHead>
+            </TableHead> */}
             <TableHead className="whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>
@@ -43,9 +43,10 @@ const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
                 setSelected(item);
                 setOpen(true);
               }}
+              className="cursor-pointer"
             >
               <TableCell className="font-medium whitespace-nowrap">
-                {item?.name}
+                {item?.last_name + ' ' + item?.first_name}
               </TableCell>
 
               <TableCell className="whitespace-nowrap">
@@ -56,7 +57,7 @@ const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
                 {item?.status}
               </TableCell>
 
-              <TableCell className="whitespace-nowrap">{item?.date}</TableCell>
+              {/* <TableCell className="whitespace-nowrap">{item?.date}</TableCell> */}
 
               <TableCell className="whitespace-nowrap">
                 <Button variant="outline" className="text-xs">

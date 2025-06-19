@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 interface TitleProps {
-  children: string;
+  children: React.ReactNode;
   center?: boolean;
   className?: string;
 }
@@ -10,8 +10,9 @@ const Title = ({ children, center, className }: TitleProps) => {
   return (
     <h1
       className={clsx(
-        className,
-        `text-2xl font-semibold text-stone-900 mb-1 ${center && 'text-center'}`
+        'text-2xl font-bold text-title',
+        center && 'text-center',
+        className
       )}
     >
       {children}

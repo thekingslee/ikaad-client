@@ -10,7 +10,7 @@ const Body = ({ children, center, className }: BodyProps) => (
   <p
     className={clsx(
       className,
-      `text-sm text-stone-600 ${center && 'text-center'}`
+      `text-sm text-title-body ${center && 'text-center'}`
     )}
   >
     {children}

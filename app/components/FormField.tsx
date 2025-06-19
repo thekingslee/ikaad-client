@@ -27,6 +27,7 @@ type FormFieldTypes = {
   placeholder: string;
   description?: string;
   type?: string;
+  disabled?: boolean;
 };
 
 const FormFieldComponent = ({
@@ -36,6 +37,7 @@ const FormFieldComponent = ({
   placeholder,
   description,
   type,
+  disabled,
 }: FormFieldTypes) => {
   return (
     <FormField
@@ -43,7 +45,7 @@ const FormFieldComponent = ({
       name={name}
       render={({ field }) => (
         <>
-          {type === 'daterr' ? ( // TODO: Enable date picker code for dates
+          {type === 'date' ? (
             <FormItem className="flex flex-col">
               <FormLabel>Date of birth</FormLabel>
               <Popover>
@@ -101,9 +103,10 @@ const FormFieldComponent = ({
               <FormLabel>{label}</FormLabel>
               <FormControl>
                 <Input
-                  className="py-[20px] shadow-none bg-white rounded-lg focus-visible:"
+                  className="py-[20px] shadow-none bg-white rounded-xl focus-visible:"
                   placeholder={placeholder}
                   type={type}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>

@@ -1,11 +1,18 @@
 import Body from '@/components/atoms/Body';
 import Subtitle from '@/components/atoms/Subtitle';
+import '../../styles/glow.scss';
 
 const ReuseInfoCard = ({
   data,
 }: {
-  data: { title: string; body: string }[];
+  data: { title: string; body: string | number }[];
 }) => {
+  function renderTextAsSpans(text: string) {
+    return text
+      .split('')
+      .map((char: string, idx: number) => <span key={idx}>{char}</span>);
+  }
+
   return (
     <div className="bg-stone-100 p-3 rounded-lg text-sm text-left mb-2">
       {data.map((item, index) => (
@@ -14,7 +21,9 @@ const ReuseInfoCard = ({
           className={` ${index === data.length - 1 ? '' : 'mb-3'}`}
         >
           <Subtitle className="font-medium">{item?.title}</Subtitle>
-          <Body className="text-xs">{item?.body}</Body>
+          <Body className="text-xs glow-text">
+            {renderTextAsSpans(String(item?.body))}
+          </Body>
         </div>
       ))}
     </div>

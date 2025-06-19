@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
 };
 
 module.exports = nextConfig;
