@@ -15,6 +15,7 @@ import Title from '@/components/atoms/Title';
 import useUserDataStore from '@/store/userData';
 import useStore from '@/store/store';
 import { useEffect } from 'react';
+import { applicationsService } from '@/services/applications';
 
 const FormData = () => {
   const router = useRouter();
@@ -23,22 +24,45 @@ const FormData = () => {
 
   const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: userData || {
-      firstname: '',
-      middlename: '',
-      lastname: '',
-      dob: '',
-    },
+    defaultValues: userData
+      ? { ...userData, dob: userData.dob ? new Date(userData.dob) : undefined }
+      : {
+          firstname: '',
+          middlename: '',
+          lastname: '',
+          dob: undefined,
+        },
   });
 
-  function onSubmit(values: z.infer<typeof userFormSchema>) {
-    setUserData({ ...values, bvn: userData?.bvn || '' });
-    // Navigate to bvn "/secure/bvn"
-    router.push('bvn');
-
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof userFormSchema>) {
+    setUserData({
+      ...values,
+      dob: values.dob.toISOString(),
+    });
     console.log(values);
+
+    // Retrieve refId and applicationId from sessionStorage
+    const refId = sessionStorage.getItem('applicationRef');
+    const applicationId = sessionStorage.getItem('applicationId');
+
+    if (!refId || !applicationId) {
+      console.log('Missing application reference or ID.');
+      return;
+    }
+
+    // Submit form data to the backend
+    try {
+      await applicationsService.submitUserInfo(refId, applicationId, {
+        firstName: values.firstname,
+        middleName: values.middlename,
+        lastName: values.lastname,
+        dob: values.dob.toISOString(),
+      });
+      // Navigate to bvn "/secure/bvn"
+      router.push('bvn');
+    } catch (error: unknown) {
+      console.error(error);
+    }
   }
 
   // UPDATE CURRENT STAGE
@@ -69,6 +93,7 @@ const FormData = () => {
               placeholder="e.g Bruce"
               type="text"
             />
+
             <FormFieldComponent
               form={form}
               name="middlename"
@@ -76,6 +101,7 @@ const FormData = () => {
               placeholder="e.g batman"
               type="text"
             />
+
             <FormFieldComponent
               form={form}
               name="lastname"

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Form } from '@/components/ui/form';
 import FormFieldComponent from '@/app/components/FormField';
 import { z } from 'zod';
@@ -15,6 +16,7 @@ import useUserDataStore from '@/store/userData';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store/store';
+import { applicationsService } from '@/services/applications';
 
 const BVN = () => {
   const router = useRouter();
@@ -32,18 +34,31 @@ const BVN = () => {
     router.push(stageData?.nextStageRoute as string);
   };
 
-  function onSubmit(values: z.infer<typeof bnvSchema>) {
-    console.log('UserData', userData);
+  async function onSubmit(values: z.infer<typeof bnvSchema>) {
     setUserData({ ...userData, bvn: values.bvn });
-    // Navigate to home "/"
-    // router.push('/');
 
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (true) {
-      navigateToNext();
+    // Retrieve refId and applicationId from sessionStorage
+    const refId = sessionStorage.getItem('applicationRef');
+    const applicationId = sessionStorage.getItem('applicationId');
+
+    if (!refId || !applicationId) {
+      console.error('Missing application reference or ID.');
+      return;
     }
-    console.log(values);
+
+    // Submit BVN data to the backend
+    try {
+      await applicationsService.submitDocumentData(refId, applicationId, {
+        document: values.bvn,
+        documentType: 'bvn',
+      });
+
+      // Navigate to next stage if successful
+      navigateToNext();
+    } catch (error: unknown) {
+      console.error('Error submitting BVN data:', error);
+      // Handle error appropriately (show error message to user)
+    }
   }
 
   // UPDATE CURRENT STAGE
@@ -56,6 +71,15 @@ const BVN = () => {
       {/* Header */}
       <header>
         <ReuseNav />
+
+        <Image
+          aria-hidden
+          src="/images/verify.svg"
+          alt="Globe icon"
+          width={60}
+          height={60}
+          className="mx-auto mt-6 mb-4"
+        />
 
         <Title center className="mt-6">
           BVN Verification

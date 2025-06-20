@@ -22,7 +22,9 @@ const ReuseInfoCard = ({
         >
           <Subtitle className="font-medium">{item?.title}</Subtitle>
           <Body className="text-xs glow-text">
-            {renderTextAsSpans(String(item?.body))}
+            {typeof item?.body === 'string' || typeof item?.body === 'number'
+              ? renderTextAsSpans(String(item?.body))
+              : item?.body}
           </Body>
         </div>
       ))}

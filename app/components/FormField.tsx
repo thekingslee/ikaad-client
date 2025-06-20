@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { useState } from 'react';
 
 type FormFieldTypes = {
   form: any;
@@ -39,6 +40,8 @@ const FormFieldComponent = ({
   type,
   disabled,
 }: FormFieldTypes) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <FormField
       control={form.control}
@@ -47,14 +50,14 @@ const FormFieldComponent = ({
         <>
           {type === 'date' ? (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
+              <FormLabel className="mb-1">Date of birth</FormLabel>
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-[240px] pl-3 text-left font-normal',
+                        'w-full pl-3 text-left font-normal rounded-xl bg-white shadow-none py-[20px]',
                         !field.value && 'text-muted-foreground'
                       )}
                     >
@@ -67,11 +70,20 @@ const FormFieldComponent = ({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent
+                  className="w-[--radix-popover-trigger-width] p-0 rounded-xl bg-white shadow-none border"
+                  align="start"
+                >
                   <Calendar
                     mode="single"
+                    className="w-full"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(date) => {
+                      if (date) {
+                        field.onChange(date);
+                        setOpen(false);
+                      }
+                    }}
                     disabled={(date) =>
                       date > new Date() || date < new Date('1900-01-01')
                     }

@@ -54,7 +54,7 @@ export const userFormSchema = z.object({
     .max(50, {
       message: 'Username must be less than 50 characters.',
     }),
-  dob: z.string(),
+  dob: z.date(),
 });
 
 export const bnvSchema = z.object({

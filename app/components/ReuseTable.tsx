@@ -20,12 +20,12 @@ type TableProps = {
 
 const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
   return (
-    <div className="container w-[420px] overflow-x-auto sm:w-auto mx-auto">
+    <div className="container min-w-[420px] overflow-x-auto sm:w-auto mx-auto hide-scrollbar">
       <Table className="w-full h-full ">
         {/* <TableCaption className="text-left">
           A list of your recent applications.
         </TableCaption> */}
-        <TableHeader>
+        <TableHeader className="sticky top-0">
           <TableRow className="bg-stone-100">
             <TableHead className="whitespace-nowrap">Name</TableHead>
             <TableHead className="whitespace-nowrap">Reference ID</TableHead>
@@ -70,10 +70,10 @@ const ReuseTable = ({ data, selected, setSelected, setOpen }: TableProps) => {
                   </Button>
                 </TableCell>
               </TableRow>
-
-              <div className="min-h-[40px]"></div>
             </>
           ))}
+
+          <div className="min-h-[40px]"></div>
         </TableBody>
       </Table>
     </div>

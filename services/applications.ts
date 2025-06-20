@@ -21,6 +21,15 @@ export interface Application {
   doc_image: string;
   id: number;
   face_match_score: number;
+  meta_data: {
+    userAgent?: string;
+    browserInfo?: {
+      browser: string;
+      browserVersion: string;
+      os: string;
+      deviceType: string;
+    };
+  };
 }
 
 export interface ApplicationsResponse {
@@ -34,6 +43,12 @@ export interface UploadSnapshotResponse {
   message: string;
   data?: any;
 }
+
+// APPLICATIONS SERVICE
+// This service handles all API calls related to applications including:
+// - Getting list of applications
+// - Uploading snapshots and documents
+// - Submitting user information
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -57,6 +72,39 @@ export const applicationsService = {
     return data;
   },
 
+  /**
+   * Get a single application by reference ID
+   * @param refId - Application reference ID
+   * @returns Promise with the application data
+   */
+  getApplicationByRefId: async (refId: string): Promise<Application> => {
+    const token = getTokenFromStorage();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    const { data } = await axios.get<{
+      status: string;
+      message: string;
+      data: {
+        success: boolean;
+        data: Application[];
+      };
+    }>(`${API_URL}/applications/${refId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data.data.data[0];
+  },
+
+  /**
+   * Upload image captured during liveness test
+   * This endpoint accepts a blob file and user ID to store the snapshot
+   * @param file - Blob containing the captured image
+   * @param userId - ID of the user to associate the image with
+   * @returns Promise<UploadSnapshotResponse> with status and message
+   */
   uploadSnapshot: async (
     file: Blob,
     userId: number
@@ -76,6 +124,64 @@ export const applicationsService = {
       {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  },
+
+  /**
+   * Submit user information for an application
+   * @param refId - Application reference ID
+   * @param applicationId - ID of the application
+   * @param formData - User form data containing firstname, middlename, lastname, dob and bvn
+   * @returns Promise with the API response data
+   */
+  submitUserInfo: async (
+    refId: string,
+    applicationId: string,
+    formData: any
+  ): Promise<any> => {
+    const token = getTokenFromStorage();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    const { data } = await axios.post(
+      `${API_URL}/applications/info/${refId}/${applicationId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  },
+
+  /**
+   * Submit document data for an application
+   * @param refId - Application reference ID
+   * @param applicationId - ID of the application
+   * @param formData - Document form data (e.g., BVN)
+   * @returns Promise with the API response data
+   */
+  submitDocumentData: async (
+    refId: string,
+    applicationId: string,
+    formData: any
+  ): Promise<any> => {
+    const token = getTokenFromStorage();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    const { data } = await axios.post(
+      `${API_URL}/applications/document/${refId}/${applicationId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
