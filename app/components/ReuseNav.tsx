@@ -11,6 +11,21 @@ const ReuseNav = () => {
     router?.back();
   };
 
+  const endFlow = () => {
+    // Clear sessionStorage
+    sessionStorage.clear();
+
+    // Close the window
+    window.close();
+
+    // Fallback: if window.close() doesn't work (due to browser security), navigate to home
+    setTimeout(() => {
+      if (!window.closed) {
+        router.push('/');
+      }
+    }, 100);
+  };
+
   return (
     <nav className="borde border-stone-100 flex items-center justify-between py-2">
       <Button
@@ -29,7 +44,7 @@ const ReuseNav = () => {
       </Button>
 
       <Button
-        onClick={goBack}
+        onClick={endFlow}
         className="px-3 pt-0 rounded-full"
         variant={'ghost'}
       >

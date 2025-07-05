@@ -88,9 +88,9 @@ const Finish = () => {
         <ReuseButton variant="default" action={endFlow}>
           Done
         </ReuseButton>
-        <ReuseButton variant="secondary" action={() => setOpen(true)}>
+        {/* <ReuseButton variant="secondary" action={() => setOpen(true)}>
           View results
-        </ReuseButton>
+        </ReuseButton> */}
 
         <Body center className="text-xs mt-2">
           Powered by <span className="text-stone-400">IKaad</span>

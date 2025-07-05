@@ -172,7 +172,7 @@ const UploadId = () => {
             </ReuseButton>
             <ReuseButton
               variant="secondary"
-              action={() => router.push('capture-id')}
+              action={() => router.replace('capture-id')}
             >
               Capture Instead
             </ReuseButton>

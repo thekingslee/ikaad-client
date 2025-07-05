@@ -207,7 +207,7 @@ const CaptureID = () => {
                 variant="secondary"
                 action={() => {
                   stopCamera();
-                  router.push('upload-id');
+                  router.replace('upload-id');
                 }}
               >
                 Upload Instead
