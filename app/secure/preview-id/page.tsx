@@ -3,7 +3,7 @@ import ReuseButton from '@/app/components/ReuseButton';
 import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import useStore from '@/store/store';
@@ -13,9 +13,15 @@ const PreviewId = () => {
   const router = useRouter();
   const { stageData, updateCurrentStage } = useStore();
   const { uploadId } = useUploadIdStore();
+  const searchParams = useSearchParams();
+  const source = searchParams.get('source') || 'unknown';
 
   const navigateToRetake = () => {
-    router.replace('capture-id');
+    if (source === 'upload') {
+      router.replace('upload-id');
+    } else {
+      router.replace('capture-id');
+    }
   };
   const navigateToNext = () => {
     router.push(stageData?.nextStageRoute as string);
@@ -43,13 +49,13 @@ const PreviewId = () => {
 
       {/* Main */}
       <main className="px-4 ">
-        <div className="h-52 w-full border-4 border-stone-900 mx-auto rounded-xl relative">
+        <div className="h-52 w-full border-4 border-custom-text p-2 mx-auto rounded-xl relative">
           {/* Image goes here */}
           <Image
             src={uploadId}
             alt="Uploaded ID"
             layout="fill"
-            className="object-cover"
+            className="object-cover rounded-lg"
           />
         </div>
       </main>
@@ -58,7 +64,7 @@ const PreviewId = () => {
       <footer>
         <div className="grid gap-2">
           <ReuseButton variant="secondary" action={navigateToRetake}>
-            Retake
+            {source === 'upload' ? 'Re-upload' : 'Retake'}
           </ReuseButton>
           <ReuseButton action={navigateToNext}>Continue</ReuseButton>
         </div>

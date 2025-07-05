@@ -53,7 +53,7 @@ const LiveCapture = () => {
   const getVideo = useCallback(async () => {
     if (videoRef.current) {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        const stream = await navigator?.mediaDevices?.getUserMedia({
           video: true,
         });
         videoRef.current.srcObject = stream;

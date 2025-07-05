@@ -141,13 +141,15 @@ const PreStartPage: React.FC = () => {
 
       {/* Body */}
       <main>
-        <div className="bg-[#FFFEFD] border border-textbody/50 rounded-lg text-sm text-left mb-4 grid grid-cols-[auto_1fr] gap-4 overflow-hidden py-3">
-          <QRCode
-            value={window.location.href}
-            size={120}
-            className="h-28 w-28 rounded-md relative top-[-4px]"
-          />
-          <div className="w-auto py-4">
+        <div className="rounded-lg text-sm text-left overflow-hidden">
+          <div className="h-[160px] mx-auto flex items-center justify-center">
+            <QRCode
+              value={window.location.href}
+              size={160}
+              className=" rounded-md "
+            />
+          </div>
+          <div className="w-auto text-center">
             <Subtitle>Scanning QR code</Subtitle>
             <Body className="text-xs">
               Scan the QR code with your camera app
@@ -156,12 +158,12 @@ const PreStartPage: React.FC = () => {
         </div>
       </main>
 
-      <footer>
-        <div className="bg-[#FFF8E8]/50 border border-textbody/20 p-4 rounded-lg text-sm text-left mb-4">
-          <Subtitle>Send link via email</Subtitle>
+      <footer className="relative top-[-12px]">
+        <div className="bg-[#FFF8E8]/20 border border-textbody/20 p-4 pt-0 rounded-lg text-sm text-left mb-4">
+          {/* <Subtitle>Send link via email</Subtitle>
           <Body className="text-xs">
             A link will be sent to your email address to start verification
-          </Body>
+          </Body> */}
 
           <div className="flex flex-col gap-2 mt-4">
             <Form {...form}>
@@ -180,7 +182,7 @@ const PreStartPage: React.FC = () => {
             </Form>
 
             <ReuseButton action={form.handleSubmit(onSubmit)}>
-              Send link
+              Send link via email
             </ReuseButton>
           </div>
         </div>

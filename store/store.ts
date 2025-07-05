@@ -42,7 +42,7 @@ export const allVerificationsStageData: any[] = [
   },
   {
     stage: 'DOCUMENT_CAPTURE',
-    startRoute: '/secure/upload-id',
+    startRoute: '/secure/select-doc',
     endRoute: '/secure/preview-id',
   },
   {

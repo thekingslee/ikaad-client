@@ -6,6 +6,7 @@ interface UserData {
   lastname?: string;
   dob?: string;
   bvn?: string;
+  docType?: string;
 }
 
 interface UserDataStore {

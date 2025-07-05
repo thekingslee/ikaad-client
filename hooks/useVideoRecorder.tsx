@@ -11,7 +11,9 @@ const useVideoRecorder = () => {
   const { setUserRecording } = useLiveCaptureStore();
 
   const startRecording = useCallback(async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator?.mediaDevices?.getUserMedia({
+      video: true,
+    });
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
     }

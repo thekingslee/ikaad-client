@@ -25,10 +25,10 @@ const CameraPermission = () => {
   // Request camera permission and display a message if given or denied
   const requestCameraAccess = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator?.mediaDevices?.getUserMedia({
         video: true,
       });
-      stream.getVideoTracks().forEach((track) => track.stop());
+      stream?.getVideoTracks()?.forEach((track) => track.stop());
       setCameraAccess(true);
     } catch (error) {
       console.error('Camera access denied:', error);
