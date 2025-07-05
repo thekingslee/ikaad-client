@@ -22,7 +22,11 @@ const flow: { id: number; step: Step; message: string }[] = [
     message: 'Please position your face within the frame',
   },
   { id: 1, step: 'smile', message: 'Please smile' },
-  { id: 2, step: 'open-mouth', message: 'Keep your eyes and your mouth open' },
+  {
+    id: 2,
+    step: 'open-mouth',
+    message: 'Open your mouth wide and raise your eyebrows',
+  },
   { id: 3, step: 'complete', message: 'Done' },
 ];
 
