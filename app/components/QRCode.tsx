@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
-import QRCodeStyling from 'qr-code-styling';
+import { useEffect, useRef, useState } from 'react';
+// Dynamic import to avoid SSR issues
+// import QRCodeStyling from 'qr-code-styling';
 
 type QRCodeProps = {
   value: string;
@@ -10,10 +11,27 @@ type QRCodeProps = {
 
 const QRCode = ({ value, size = 96, className }: QRCodeProps) => {
   const qrRef = useRef<HTMLDivElement>(null);
-  const qrCode = useRef<QRCodeStyling | null>(null);
+  const qrCode = useRef<any>(null);
+  const [QRCodeStyling, setQRCodeStyling] = useState<any>(null);
 
   useEffect(() => {
-    if (!qrCode.current) {
+    // Dynamically import QRCodeStyling only in browser environment
+    const loadQRCodeStyling = async () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const QRCodeStylingModule = await import('qr-code-styling');
+          setQRCodeStyling(QRCodeStylingModule.default);
+        } catch (error) {
+          console.error('Error loading qr-code-styling:', error);
+        }
+      }
+    };
+
+    loadQRCodeStyling();
+  }, []);
+
+  useEffect(() => {
+    if (!qrCode.current && QRCodeStyling) {
       qrCode.current = new QRCodeStyling({
         width: size,
         height: size,
@@ -75,7 +93,7 @@ const QRCode = ({ value, size = 96, className }: QRCodeProps) => {
       qrRef.current.innerHTML = '';
       qrCode.current.append(qrRef.current);
     }
-  }, []);
+  }, [QRCodeStyling, size]);
 
   useEffect(() => {
     if (qrCode.current && value) {

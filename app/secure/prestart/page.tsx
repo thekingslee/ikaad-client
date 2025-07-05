@@ -52,6 +52,7 @@ const PreStartPage: React.FC = () => {
 
   useEffect(() => {
     // Get verificationStages from URL
+    if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
     const stagesParam = url.searchParams.get('verification-stages');
 
@@ -103,6 +104,8 @@ const PreStartPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleResize = () => {
       if (window.innerWidth <= 768) {
         console.log('You are using a mobile device');
@@ -144,7 +147,7 @@ const PreStartPage: React.FC = () => {
         <div className="rounded-lg text-sm text-left overflow-hidden">
           <div className="h-[160px] mx-auto flex items-center justify-center">
             <QRCode
-              value={window.location.href}
+              value={typeof window !== 'undefined' ? window.location.href : ''}
               size={160}
               className=" rounded-md "
             />

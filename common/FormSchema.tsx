@@ -68,9 +68,20 @@ export const bnvSchema = z.object({
     }),
 });
 
+// Create a safe File reference that works in both server and client environments
+const SafeFile =
+  typeof File !== 'undefined'
+    ? File
+    : class MockFile {
+        size: number = 0;
+        type: string = '';
+        name: string = '';
+        constructor() {}
+      };
+
 export const docUploadSchema = z.object({
   doc: z
-    .instanceof(File)
+    .instanceof(SafeFile)
     .refine((file) => file.size <= 5 * 1024 * 1024, {
       message: 'File size must be less than 5MB.',
     })

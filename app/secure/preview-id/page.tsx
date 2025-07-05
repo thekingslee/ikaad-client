@@ -4,12 +4,12 @@ import ReuseNav from '@/app/components/ReuseNav';
 import Body from '@/components/atoms/Body';
 import Title from '@/components/atoms/Title';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import useStore from '@/store/store';
 import useUploadIdStore from '@/store/uploadIdStore';
 
-const PreviewId = () => {
+const PreviewIdContent = () => {
   const router = useRouter();
   const { stageData, updateCurrentStage } = useStore();
   const { uploadId } = useUploadIdStore();
@@ -74,6 +74,14 @@ const PreviewId = () => {
         </Body>
       </footer>
     </>
+  );
+};
+
+const PreviewId = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PreviewIdContent />
+    </Suspense>
   );
 };
 
