@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useStore, {
   allVerificationsStageData,
@@ -26,6 +26,7 @@ const PreStartPage: React.FC = () => {
   const router = useRouter();
   const { deviceType } = useDeviceType();
   const { setVerificationStages } = useStore();
+  const [currentUrl, setCurrentUrl] = useState('');
 
   const form = useForm<z.infer<typeof preStartSchema>>({
     resolver: zodResolver(preStartSchema),
@@ -104,6 +105,13 @@ const PreStartPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Set current URL for QR code
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
+
+  useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const handleResize = () => {
@@ -146,11 +154,7 @@ const PreStartPage: React.FC = () => {
       <main>
         <div className="rounded-lg text-sm text-left overflow-hidden">
           <div className="h-[160px] mx-auto flex items-center justify-center">
-            <QRCode
-              value={typeof window !== 'undefined' ? window.location.href : ''}
-              size={160}
-              className=" rounded-md "
-            />
+            <QRCode value={currentUrl} size={160} className=" rounded-md " />
           </div>
           <div className="w-auto text-center">
             <Subtitle>Scanning QR code</Subtitle>
